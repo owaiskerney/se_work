@@ -34,7 +34,7 @@
 							//document.write(")
 							while (numPictures!=4){
 								$(".row").last().append("<div class=\"col-sm-4 col-md-4 col-lg-4\">") 		 
-								$(".col-lg-4").last().append("<div class=\"thumbnail\" style=\"max-height: 350px; min-height: 350px; width: 400px\">")
+								$(".col-lg-4").last().append('<div class="thumbnail" style="max-height: 315px; min-height: 315px; width: 400px" position:relative>')
 								$(".thumbnail").last().append("<a href=\"\">")
 
 								$(".thumbnail").last().append("<img src=\"./sample_photos/1.jpg\">")
@@ -42,10 +42,13 @@
 								$(".img").last().attr("class", "image-rounded")
 								$(".img").last().attr("alt", "Picture")
 								$(".img").last().attr("style", "width:100%;height:100%")
-								$(".thumbnail").last().append("<div class=\"caption\">")
-								$(".caption").last().append("<p class=\"lead\">Budding leaves</p>")
-								$(".lead").last().append('<p class="buffer"></p>')
-								$(".buffer").last().append('<button type="button" class="btn btn-primary" style="width:50px">Get</button>')
+								$(".thumbnail").last().append('<div class="caption">')
+								
+								$(".caption").last().append("<p class=\"lead\">Budding leaves   </p>")
+								//$(".lead").last().append('<p class="buffer"></p>')
+								$(".lead").last().append('<button type="button" position:"absolute" right:"0" bottom:"0" class="btn btn-primary" style="width:50px;height:30px"><strong>↓<strong></button>')
+								$(".lead").last().append('<text style="width:50px;height:30px"><strong>  349  <strong></text>')
+								$(".lead").last().append('<button type="button" position:"absolute" right:"0" bottom:"0" class="btn btn-primary" style="width:50px;height:30px"><strong>&#10084;<strong></button>')
 								document.write("</div>")
 								document.write("</a>")
 								document.write("</div>")
