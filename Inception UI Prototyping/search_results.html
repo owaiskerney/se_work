@@ -26,29 +26,35 @@
 
 	<div class="container-fluid" id="main_container">
 		<script type="text/javascript">
-			
+			//Making three rows
 			for (var i = 0; i<3; i++){
 				var numPictures=1
 				var container=document.getElementById("main_container")
 				$("#main_container").append("<div class=\"row\">")
 							//document.write(")
+							//Making three boxes in each row
 							while (numPictures!=4){
 								$(".row").last().append("<div class=\"col-sm-4 col-md-4 col-lg-4\">") 		 
 								$(".col-lg-4").last().append('<div class="thumbnail" style="max-height: 350px; min-height: 350px; width: 400px" position:relative>')
 								$(".thumbnail").last().append("<a href=\"\">")
-								$(".thumbnail").last().append("<img src=\"./sample_photos/1.jpg\">")
+								//Adding image
+								$(".thumbnail").last().append('<img class="tasweer" style="width:100%; height:100%">')
+								$(".tasweer").last().attr("src", function(){
+										return ("./sample_photos/" + (i+1)*numPictures + ".jpg");
+								})
 								//$(".img").last().attr("src", "./sample_photos/1.jpg")
-								$(".img").last().attr("class", "image-rounded")
-								$(".img").last().attr("alt", "Picture")
-								$(".img").last().attr("style", "width:100%;height:100%")
+								$(".tasweer").last().attr("class", "image-rounded")
+								$(".tasweer").last().attr("alt", "Picture")
+								$(".tasweer").last().attr("style", "width:100%;height:100%")
+								//Adding panel for name, like button, download button and download statistics
 								$(".thumbnail").last().append('<div class="panel_holder col-lg-8" position:"absolute">')
-								//$(".panel_holder").last().append('<div class="caption">')
-								//$(".lead").last().append('<p class="buffer"></p>')
+								//Adding the required components to panel
 								$(".panel_holder").last().append('<img src="./sample_photos/2.jpg" position:"absolute" class="img-circle" alt="Cinque Terre" style="width:30%;height:30%">')
 								$(".panel_holder").last().append('<button type="button" position:"absolute" right:"0" bottom:"0" class="btn btn-primary" style="width:50px;height:30px"><strong>↓<strong></button>')
 								$(".panel_holder").last().append('<text style="width:50px;height:30px" position:"absolute"><strong>  349  <strong></text>')
 								$(".panel_holder").last().append('<button type="button" position:"absolute" class="btn btn-primary" style="width:50px;height:30px"><strong>&#10084;<strong></button>')
-							$(".panel_holder").last().append('<p class="caption" position:"absolute"><strong>Budding leaves<strong></p>')
+								$(".panel_holder").last().append('<p class="caption" position:"absolute"><strong>Budding leaves<strong></p>')
+								//Adding closing tags
 								$(".row").last().append("</div>")
 								$(".thumbnail").last().append("</a>")
 								$(".col-lg-4").last().append("</div>")
