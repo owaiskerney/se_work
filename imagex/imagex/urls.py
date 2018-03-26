@@ -8,6 +8,7 @@ from upload import views
 urlpatterns = [
     url('^$', views.home, name='home'),
     path('upload/', include('upload.urls')),
+    path('search/', include('search.urls')),
     url(r'^admin/', admin.site.urls),
 ]
 
