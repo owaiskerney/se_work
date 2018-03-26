@@ -22,22 +22,43 @@ class Member(models.Model):
 	email = models. EmailField(max_length=30)
 	self_description = models.TextField(max_length=30,blank=True)
 
+	#Add user as foreign id?
+	user=models.ForeignKey(User, on_delete=models.CASCADE)
+
 	def __str__(self):
 		return self.username
 
 class Image(models.Model):
 	title = models.CharField(max_length=30, blank=True)
-	tag = models.CharField(max_length=30, blank=True)
-	# category = models.CharField(max_length=255, blank=True)
+	#tag = models.CharField(max_length=30, blank=True)
+
+	
 	description = models.TextField(max_length=150, blank=True)
 	image = models.ImageField(upload_to='images/',validators=[validate_file_extension])
 	uploadtime = models.DateField(auto_now_add=True)
-	category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.CASCADE)
-	owner = models.ForeignKey(Member, on_delete=models.CASCADE)
-	like_stats=models.
+	tag = models.ManytoManyField(Tag) #Tags of the image, related to tag model
+	category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.CASCADE) #Category of the image, related to category model
+	owner = models.ForeignKey(Member, on_delete=models.CASCADE) #
+	like_stats=models.IntegerField(default=0)
+	download_stats=models.IntegerField(default=0)
 	
 	def __str__(self):
 		return self.title
 
 
 class Tag(models.Model):
+	name=models.CharField(max_length=20)
+
+
+class User(models.Model):
+	#What to add? What about many to many with images and other associations
+
+
+class Gallery(models.Model):
+	name=models.CharField(max_length=20)
+	category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.CASCADE) #Category of the gallery, related to category model
+	image = models.ManytoManyField(image) #Images in the gallery, related to Image model
+	tag = models.ManytoManyField(Tag) #Tags of the image, related to tag model
+
+
+
