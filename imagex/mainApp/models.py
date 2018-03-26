@@ -56,3 +56,5 @@ class Gallery(models.Model):
 	category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.CASCADE) #Category of the gallery, related to category model
 	image = models.ManyToManyField(Image) #Images in the gallery, related to Image model
 	#tag = models.ManyToManyField(Tag) #Tags of the image, related to tag model
+
+# Create your models here.

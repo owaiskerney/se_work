@@ -37,8 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'upload.apps.UploadConfig' # Adding uplaod app
-    'search.apps.SearchConfig' # Adding search app
+    'mainApp.apps.MainappConfig', 
 ]
 
 MIDDLEWARE = [
