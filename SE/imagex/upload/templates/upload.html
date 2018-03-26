@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Upload Image</title>
+<!-- For-Mobile-Apps -->
+
+</head>
+<body>
+{% load staticfiles %}
+{% block content %}
+
+<div class="text-center">
+<div class ='container'>
+	<form class="form-group" method="post" enctype="multipart/form-data">
+	    {% csrf_token %}
+	  <div class="form-group">
+	    <label for="exampleFormControlInput1">Title</label>
+	    <br>
+	    {{ form.title }} 
+	  </div>
+	  <div class="form-group">
+	    <label for="exampleFormControlInput1">Tag</label>
+	    <br>
+	    {{ form.tag }}
+	  </div>
+
+	  <div class="form-group">
+	    <label for="exampleFormControlSelect1">Category</label>
+	    <br>
+	    {{ form.category}}
+	  </div>
+
+	  <div class="form-group">
+	    <label for="exampleFormControlTextarea1">Description</label>
+	    <br>
+	    {{ form.description }}
+	  </div>
+	  	<br>
+	  	{{ form.image }}
+	  	<br><br><br><br>
+	  	<button type="submit" class="btn btn-outline-secondary" data-toggle="modal" data-target="#myModal">Upload</button>
+	</form>
+ </div>
+ </div>
+
+{% endblock %}
