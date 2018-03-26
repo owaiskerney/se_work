@@ -1,6 +1,21 @@
 from django.db import models
 from .validators import validate_file_extension
 
+
+
+class User(models.Model):
+	def __str__(self):
+		return self.title
+
+
+
+
+
+class Tag(models.Model):
+	name=models.CharField(max_length=20)
+	def __str__(self):
+		return self.title
+
 class Category(models.Model):
 	name = models.CharField(max_length=30,\
 		choices=(['Abstract','Abstract'],['Aerial','Aerial'],['Animals','Animals'],['Architecture','Architecture'],\
@@ -23,7 +38,7 @@ class Member(models.Model):
 	self_description = models.TextField(max_length=30,blank=True)
 
 	#Add user as foreign id?
-	#user=models.ForeignKey(User, on_delete=models.CASCADE)
+	user=models.ForeignKey(User, on_delete=models.CASCADE)
 
 	def __str__(self):
 		return self.username
@@ -38,13 +53,12 @@ class Image(models.Model):
 	owner = models.ForeignKey(Member, on_delete=models.CASCADE) #
 	like_stats=models.IntegerField(default=0)
 	download_stats=models.IntegerField(default=0)
+	user=models.ManyToManyField(User)
 	
 	def __str__(self):
 		return self.title
 
 
-class Tag(models.Model):
-	name=models.CharField(max_length=20)
 
 
 
@@ -53,6 +67,10 @@ class Gallery(models.Model):
 	category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.CASCADE) #Category of the gallery, related to category model
 	image = models.ManyToManyField(Image) #Images in the gallery, related to Image model
 	tag = models.ManyToManyField(Tag) #Tags of the image, related to tag model
+	user=models.ManyToManyField(User)
+
+	def __str__(self):
+		return self.title
 
 
 
