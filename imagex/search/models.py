@@ -34,8 +34,10 @@ class Image(models.Model):
 	uploadtime = models.DateField(auto_now_add=True)
 	category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.CASCADE)
 	owner = models.ForeignKey(Member, on_delete=models.CASCADE)
+	like_stats=models.
 	
 	def __str__(self):
 		return self.title
 
 
+class Tag(models.Model):
