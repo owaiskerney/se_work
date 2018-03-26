@@ -29,14 +29,11 @@ class Member(models.Model):
 		return self.username
 
 class Image(models.Model):
-	title = models.CharField(max_length=30, blank=True)
-	#tag = models.CharField(max_length=30, blank=True)
-
-	
+	title = models.CharField(max_length=30, blank=True)	
 	description = models.TextField(max_length=150, blank=True)
 	image = models.ImageField(upload_to='images/',validators=[validate_file_extension])
 	uploadtime = models.DateField(auto_now_add=True)
-	#tag = models.ManyToManyField(Tag) #Tags of the image, related to tag model
+	tag = models.ManyToManyField(Tag) #Tags of the image, related to tag model
 	category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.CASCADE) #Category of the image, related to category model
 	owner = models.ForeignKey(Member, on_delete=models.CASCADE) #
 	like_stats=models.IntegerField(default=0)
@@ -55,6 +52,8 @@ class Gallery(models.Model):
 	name=models.CharField(max_length=20)
 	category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.CASCADE) #Category of the gallery, related to category model
 	image = models.ManyToManyField(Image) #Images in the gallery, related to Image model
-	#tag = models.ManyToManyField(Tag) #Tags of the image, related to tag model
+	tag = models.ManyToManyField(Tag) #Tags of the image, related to tag model
 
-# Create your models here.
+
+
+
