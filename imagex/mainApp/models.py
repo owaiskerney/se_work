@@ -6,11 +6,20 @@ from .validators import validate_file_extension
 class User(models.Model):
 	def __str__(self):
 		return self.title
+#Search_image function implementation
+	#def search_image(keyword):
+
 
 class Tag(models.Model):
 	name=models.CharField(max_length=20)
 	def __str__(self):
 		return self.title
+
+	#search_tag function implementation
+	#def search_tag(keyword):
+
+
+
 
 class Category(models.Model):
 	name = models.CharField(max_length=30,\
@@ -53,6 +62,12 @@ class Image(models.Model):
 	
 	def __str__(self):
 		return self.title
+
+#implementing retrieve_image function
+	#def retrieve_image(image_id):
+
+	
+
 
 
 

@@ -6,11 +6,11 @@ from django.conf.urls.static import static
 from mainApp import views
 
 urlpatterns = [
-    url('^$', views.home, name='home'),
-    url(r'^admin/', admin.site.urls),
+    #url('^$', views.home, name='home'),
+    #url(r'^admin/', admin.site.urls),
     #url(r'^login/',views.login, name='login'),
     #url(r'^upload/', views.upload, name='upload'),
-    urt(r'^mainApp/', include('mainApp.urls'))
+    url(r'^mainApp/', include('mainApp.urls'))
 ]
 
 # if settings.DEBUG:

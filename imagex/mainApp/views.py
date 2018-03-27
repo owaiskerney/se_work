@@ -9,11 +9,11 @@ def index(request):
 # Upload view
 def upload(request):
 	if not isAuthenticated(request):
-        return redirect('/mainApp/index')
+		return redirect('/mainApp/index')
 
 
 # Search view
 def search(request):
 	if not isAuthenticated(request):
-        return redirect('/mainApp/index')
+		return redirect('/mainApp/index')
 tags = Tag.objects.all()
