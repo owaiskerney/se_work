@@ -3,12 +3,13 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from upload import views
+from mainApp import views
 
 urlpatterns = [
     url('^$', views.home, name='home'),
-    path('mainApp/', include('mainApp.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^login/',views.login, name='login'),
+    url(r'^upload/', views.upload, name='upload'),
 ]
 
 # if settings.DEBUG:
