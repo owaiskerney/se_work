@@ -109,29 +109,26 @@
       <!--/projects-->
       <ul class="portfolio-area">
             {% block content %}
+			
 			<form class="form-group" method="post" enctype="multipart/form-data">
-			{% csrf_token %}
-            <li class="portfolio-item2" data-id="id-0" data-type="cat-item-4">
-              <div>
-                <span class="image-block block2 img-hover">
-                <a class="image-zoom" href="images/g1.jpg" rel="prettyPhoto[gallery]">
+						{% csrf_token %}
+				<li class="portfolio-item2" data-id="id-0" data-type="cat-item-4">
+				<div>
+					<span class="image-block block2 img-hover">
+					<a class="image-zoom" href="images/g1.jpg" rel="prettyPhoto[gallery]">
                     
-                    <img src="images/g1.jpg" class="img-responsive" alt="Conceit">
+						<img src="images/g1.jpg" class="img-responsive" alt="Conceit">
 					
-                    <div class="port-info">
-                      <h5>View Image</h5>
-						
-						
-						
-                      
-                </div>
+						<div class="port-info">
+						<h5>View Image</h5>
+						</div>
 					
-                </a>
-                </span>
-				  <p class="like">&#10084;</p>
-              </div>
+					</a>
+					</span>
+					<p class="like">&#10084;</p>
+				</div>
 				
-            </li>
+				</li>
 			</form>
 			{% endblock %}
             

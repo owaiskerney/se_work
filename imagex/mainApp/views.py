@@ -106,21 +106,10 @@ def search(request):
 				result_images.append(image)
 	
 	#Supply list of images to front end
-	
-	
-				
-	
-	
 
-	
-	#image_id_list=[it.image_id for it in Image.Tag.filter(tag_id=tag_id_found)]
-
-
-	print("Owais")
 	
 	context={
 		'result_images': result_images
-	
 	}
 
 
