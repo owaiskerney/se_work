@@ -9,7 +9,7 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.hashers import make_password, check_password
-from upload.validators import validate_file_extension
+from mainApp.validators import validate_file_extension
 from django.contrib.auth.decorators import login_required
 import datetime
 from django.contrib.auth import login, authenticate
@@ -19,8 +19,8 @@ import json
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from upload.models import *
-from upload.forms import ImageForm
+from mainApp.models import *
+from mainApp.forms import ImageForm
 
 
 
