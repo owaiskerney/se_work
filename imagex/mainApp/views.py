@@ -21,6 +21,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from mainApp.models import *
 from mainApp.forms import ImageForm
+from django.db.models import Q
 
 MAX_NUMBER=3
 MAX_FREQUENCY=4
@@ -87,37 +88,45 @@ def upload(request):
 
 # Search view
 def search(request):
-	#if not isAuthenticated(request):
-	#find tag in Tag
-	#use tag_id to get corresponding image_id in many to many table
-	#keep using image_ids obtained from this query to return all images to front end
-	tag_id_found= tag_id in Tag.objects.filter(name= tag)
+	#Extracting keyword to be matched to tag
+	if request.method == 'POST':
+		title = request.POST.get('keyword')
+		
+	#Finding tag id of tag supplied as keyword
+	tag_id_found= Tag.objects.get(name=keyword).id
+	
+	#Finding corresponding image with specified tag
+	all_images= Image.objects.all()
+	result_images=[]
+	
+	for image in all_images:
+		tags= image.tag.all()
+		for tag in tags:
+			if (tag==tag_id_found):
+				result_images.append(image)
+	
+	#Supply list of images to front end
+	
+	
+				
+	
 	
 
-	#if tag not found
-	#if (tag_id_found== ):
-		#Implement tag not found
-
-	#if tag found, look for corresponding image_id
-	image_id_list=[it.image_id for it in Image.Tag.filter(tag_id=tag_id_found)]
-
-	#Connect images to front end to load them
-	image_results=[]
-	for i in image_id_list:
-		image_results.append()
+	
+	#image_id_list=[it.image_id for it in Image.Tag.filter(tag_id=tag_id_found)]
 
 
-
-	#return the search.html page with laoded images 
-
-
-
-	context={}
+	print("Owais")
+	
+	context={
+		'result_images': result_images
+	
+	}
 
 
 
 
-	return render(request, 'mainApp/Search.html', context)
+	return render(request, 'Search.html', context)
 
 	#return redirect('/home')
 

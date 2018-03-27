@@ -107,9 +107,10 @@
       <div class="container">
 <div class="inner_sec_info_wthree_agile">
       <!--/projects-->
-          
       <ul class="portfolio-area">
-            
+            {% block content %}
+			<form class="form-group" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
             <li class="portfolio-item2" data-id="id-0" data-type="cat-item-4">
               <div>
                 <span class="image-block block2 img-hover">
@@ -131,143 +132,8 @@
               </div>
 				
             </li>
-            
-            
-            <li class="portfolio-item2" data-id="id-1" data-type="cat-item-2">
-              <div>
-                <span class="image-block block2">
-                <a class="image-zoom" href="images/g2.jpg" rel="prettyPhoto[gallery]">
-                    
-                <img src="images/g2.jpg" class="img-responsive" alt="Conceit">
-                    <div class="port-info">
-                      <h5>View image</h5>
-                 
-                </div>
-                </a>
-                </span>
-                <p class="like">&#10084;</p>
-              </div>
-            </li>
-            
-            
-            <li class="portfolio-item2" data-id="id-2" data-type="cat-item-1">
-              <div>
-                <span class="image-block block2">
-                <a class="image-zoom" href="images/g3.jpg" rel="prettyPhoto[gallery]">
-                    
-                    <img src="images/g3.jpg" class="img-responsive" alt="Conceit">
-                    <div class="port-info">
-                      <h5>View Image</h5>
-                      
-                </div>
-                </a>
-                </span>
-				  <p class="like">&#10084;</p>
-              </div>
-            </li>
-            
-            
-            <li class="portfolio-item2" data-id="id-3" data-type="cat-item-4">
-              <div>
-                <span class="image-block block2">
-                <a class="image-zoom" href="images/g4.jpg" rel="prettyPhoto[gallery]">
-                    
-                    <img src="images/g4.jpg" class="img-responsive" alt="Conceit">
-                    <div class="port-info">
-                      <h5>View Image</h5>
-                      
-                </div>
-                </a>
-                </span>
-				  <p class="like">&#10084;</p>
-              </div>
-            </li>
-            
-            
-            <li class="portfolio-item2" data-id="id-4" data-type="cat-item-3">
-              <div>
-                <span class="image-block block2">
-                <a class="image-zoom" href="images/g5.jpg" rel="prettyPhoto[gallery]">
-                    
-                <img src="images/g5.jpg" class="img-responsive" alt="Conceit">
-                    <div class="port-info">
-                      <h5>View Image</h5>
-                      
-                </div>
-                </a>
-                </span>
-				  <p class="like">&#10084;</p>
-              </div>
-            </li>
-            
-            
-            <li class="portfolio-item2" data-id="id-5" data-type="cat-item-2">
-              <div>
-                <span class="image-block block2">
-                <a class="image-zoom" href="images/g6.jpg" rel="prettyPhoto[gallery]">
-                    
-                    <img src="images/g6.jpg" class="img-responsive" alt="Conceit">
-                    <div class="port-info">
-                      <h5>View Image</h5>
-                      
-                </div>
-                </a>
-                </span>
-				  <p class="like">&#10084;</p>
-              </div>
-            </li>
-            
-            
-            <li class="portfolio-item2" data-id="id-6" data-type="cat-item-1">
-              <div>
-                <span class="image-block block2">
-                <a class="image-zoom" href="images/g7.jpg" rel="prettyPhoto[gallery]">
-                    
-                    <img src="images/g7.jpg" class="img-responsive" alt="Conceit">
-                    <div class="port-info">
-                      <h5>View Image</h5>
-                      
-                </div>
-                </a>
-                </span>
-				  <p class="like">&#10084;</p>
-              </div>
-            </li>
-            
-            
-            <li class="portfolio-item2" data-id="id-7" data-type="cat-item-1">
-              <div>
-                <span class="image-block block2">
-                <a class="image-zoom" href="images/g8.jpg" rel="prettyPhoto[gallery]">
-                    
-                    <img src="images/g8.jpg" class="img-responsive" alt="Conceit">
-                    <div class="port-info">
-                      <h5>View Image</h5>
-                     
-                </div>
-                    
-                </a>
-                </span>
-				  <p class="like">&#10084;</p>
-              </div>
-            </li>
-            <li class="portfolio-item2" data-id="id-7" data-type="cat-item-1">
-              <div>
-                <span class="image-block block2">
-                <a class="image-zoom" href="images/g1.jpg" rel="prettyPhoto[gallery]">
-                    
-                    <img src="images/g1.jpg" class="img-responsive" alt="Conceit">
-                    <div class="port-info">
-                      <h5>View Iamge</h5>
-                  
-                </div>
-                    
-                </a>
-                </span>
-				  <p class="like">&#10084;</p>
-              </div>
-            </li>
-            
+			</form>
+			{% endblock %}
             
             <div class="clearfix"></div>
       </ul>
