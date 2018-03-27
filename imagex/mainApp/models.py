@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 
 
 
-class User(models.Model):
-	def __str__(self):
-		return self.title
+#class User(models.Model):
+#	def __str__(self):
+#		return self.title
 #Search_image function implementation
 	#def search_image(keyword):
 
@@ -14,7 +14,7 @@ class User(models.Model):
 class Tag(models.Model):
 	name=models.CharField(max_length=20)
 	def __str__(self):
-		return self.title
+		return self.name
 
 	#search_tag function implementation
 	#Remember to fix url for this
