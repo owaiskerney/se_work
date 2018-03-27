@@ -1,5 +1,6 @@
 from django.db import models
 from .validators import validate_file_extension
+from django.contrib.auth.models import User
 
 
 
@@ -35,7 +36,7 @@ class Category(models.Model):
 
 	class Meta: 
 		ordering = ['name']
-
+		
 class Member(models.Model):
 	username = models.CharField(max_length=20)
 	password = models.CharField(max_length=15)
@@ -54,9 +55,9 @@ class Image(models.Model):
 	description = models.TextField(max_length=150, blank=True)
 	image = models.ImageField(upload_to='images/',validators=[validate_file_extension])
 	uploadtime = models.DateField(auto_now_add=True)
-	tag = models.ManyToManyField(Tag) #Tags of the image, related to tag model
+	tag = models.ManyToManyField(Tag, blank=True) #Tags of the image, related to tag model
 	category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.CASCADE) #Category of the image, related to category model
-	owner = models.ForeignKey(Member, on_delete=models.CASCADE) #
+	owner = models.ForeignKey(User, on_delete=models.CASCADE) #temporary use for demo
 	like_stats=models.IntegerField(default=0)
 	download_stats=models.IntegerField(default=0)
 	user=models.ManyToManyField(User)
