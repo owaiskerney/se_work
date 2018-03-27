@@ -22,7 +22,8 @@ from django.core.files.storage import FileSystemStorage
 from mainApp.models import *
 from mainApp.forms import ImageForm
 
-
+MAX_NUMBER=3
+MAX_FREQUENCY=4
 
 
 
@@ -59,7 +60,7 @@ def upload(request):
         total = Image.objects.filter(owner=request.user).count()
         frequency = Image.objects.filter(owner=request.user, uploadtime=datetime.date.today()).count()
        
-        if form.is_valid() and total < 3 and frequency < 4:
+        if form.is_valid() and total < MAX_NUMBER and frequency < MAX_FREQUENCY:
             cd = form.cleaned_data
             new_item=form.save(commit=False)
             new_item.owner = request.user
@@ -72,10 +73,10 @@ def upload(request):
         elif not form.is_valid():
             form=ImageForm()
             return render(request,'upload.html', {'form':form, 'feedback':json.dumps("Please submit JPEG file!")})   
-        elif total >= 3:
+        elif total >= MAX_NUMBER:
             form=ImageForm()
             return render(request,'upload.html', {'form':form, 'feedback':json.dumps("You are only allowed to maintain 3 images!")})   
-        elif frequency >= 4: 
+        elif frequency >= MAX_FREQUENCY: 
             form=ImageForm()
             return render(request,'upload.html', {'form':form, 'feedback':json.dumps("You are only allowed to upload 4 images per day!")})    
     else:
