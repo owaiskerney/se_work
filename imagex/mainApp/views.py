@@ -26,7 +26,7 @@ from mainApp.forms import ImageForm
 
 
 
-def index(request):
+def home(request):
 	return HttpResponse("This is main app")
 
 #login 
