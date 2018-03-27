@@ -60,7 +60,7 @@ class Image(models.Model):
 	owner = models.ForeignKey(User, on_delete=models.CASCADE) #temporary use for demo
 	like_stats=models.IntegerField(default=0)
 	download_stats=models.IntegerField(default=0)
-	user=models.ManyToManyField(User)
+	#user=models.ManyToManyField(User)
 	
 	def __str__(self):
 		return self.title
