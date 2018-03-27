@@ -16,6 +16,7 @@ class Tag(models.Model):
 		return self.title
 
 	#search_tag function implementation
+	#Remember to fix url for this
 	#def search_tag(keyword):
 
 
