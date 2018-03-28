@@ -25,6 +25,7 @@ from django.db.models import Q
 
 MAX_NUMBER=3
 MAX_FREQUENCY=4
+TAG_LIMIT = 10
 
 
 
@@ -46,18 +47,25 @@ def login(request):
 
 # Upload view
 @login_required
+@login_required
 def upload(request):
     if request.method == 'POST':
         form= ImageForm(request.POST, request.FILES)
         title = request.POST.get('title')
         tag = request.POST.get('tag')
+        category = request.POST.get('category')
         description = request.POST.get('description')
         tag_list = tag.split(',')
+        if len(tag_list) > TAG_LIMIT:
+            return render(request,'upload.html', {'form':form, 'feedback':json.dumps("You have reached tag limit!")})    
+
         for tag in tag_list: 
             if not Tag.objects.filter(name=tag):
                 new_tag = Tag(name=tag)
                 new_tag.save()
-
+        if not Category.objects.filter(name=category):
+            new_category = Category(name=category)
+            new_category.save()             
         total = Image.objects.filter(owner=request.user).count()
         frequency = Image.objects.filter(owner=request.user, uploadtime=datetime.date.today()).count()
        
@@ -66,8 +74,9 @@ def upload(request):
             new_item=form.save(commit=False)
             new_item.owner = request.user
             new_item.title = title 
-            new_item.description = description          
-            new_item.save()  
+            new_item.description = description    
+            new_item.category = Category.objects.get(name=category)          
+            new_item.save() 
             for item in tag_list:
                 new_item.tag.add(Tag.objects.get(name=item))         
             return redirect(home)
@@ -83,7 +92,6 @@ def upload(request):
     else:
         form = ImageForm()
     return render(request, 'upload.html', {'form': form})
-
 
 
 # Search view
