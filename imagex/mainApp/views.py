@@ -65,16 +65,16 @@ def upload(request):
             new_item=form.save(commit=False)
             new_item.owner = request.user
             new_item.title = title 
-            new_item.description = description    
-            new_item.category = Category.objects.get(name=category)          
-            new_item.save()
-            for tag in tag_list: 
-                if not Tag.objects.filter(name=tag):
-                    new_tag = Tag(name=tag)
-                    new_tag.save()
+            new_item.description = description          
+            new_item.save()   
             if not Category.objects.filter(name=category):
                 new_category = Category(name=category)
                 new_category.save()   
+            new_item.category = Category.objects.get(name=category)          
+            for tag in tag_list: 
+                if not Tag.objects.filter(name=tag):
+                    new_tag = Tag(name=tag)
+                    new_tag.save() 
             for item in tag_list:
                 new_item.tag.add(Tag.objects.get(name=item))         
             return redirect(account)
