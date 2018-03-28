@@ -97,8 +97,8 @@ def upload(request):
 # Search view
 def search(request):
 	#Extracting keyword to be matched to tag
-	if request.method == 'POST':
-		title = request.POST.get('keyword')
+	if request.method == 'GET':
+		keyword = request.GET.get('keyword')
 		
 	#Finding tag id of tag supplied as keyword
 	tag_id_found= Tag.objects.get(name=keyword).id
