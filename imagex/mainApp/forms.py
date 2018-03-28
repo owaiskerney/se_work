@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 class ImageForm(forms.ModelForm):
     class Meta:
         model = Image
-        fields = ['title','category', 'description', 'image', ]
+        fields = ['title', 'description', 'image', ]
 
     def save(self, force_insert=False,force_update=False, commit=True):
     	image=super(ImageForm,self).save(commit=False)
