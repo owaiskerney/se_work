@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^login/',views.login, name='login'),
     url(r'^upload/', views.upload, name='upload'),
     url(r'^search/', views.search, name='search'),
+    url(r'^myaccount/',views.account, name='account')
 
     #url('', include('mainApp.urls'))
 ]
