@@ -107,13 +107,12 @@ def search (request):
     
     context={
       'result_images': result_images
-    }    
-
+    }     
     return render(request, 'search.html', context)
 
 #tags = Tag.objects.all()
 
-def account(request):
+def myaccount(request):
     try:
         image_found = Image.objects.filter(owner=request.user)
     except ObjectDoesNotExist:
