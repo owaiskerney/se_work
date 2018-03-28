@@ -77,7 +77,7 @@ def upload(request):
                     new_tag.save() 
             for item in tag_list:
                 new_item.tag.add(Tag.objects.get(name=item))         
-            return redirect(account)
+            return redirect(myaccount)
         elif not form.is_valid():
             form=ImageForm()
             return render(request,'upload.html', {'form':form, 'feedback':json.dumps("Please submit JPEG file!")})   
