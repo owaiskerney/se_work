@@ -24,10 +24,10 @@ from mainApp.forms import ImageForm
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 
-MAX_NUMBER=3
-MAX_FREQUENCY=4
-TAG_LIMIT = 10
 
+MAX_NUMBER=100
+MAX_FREQUENCY=100
+TAG_LIMIT = 10
 
 
 def home(request):
@@ -45,7 +45,6 @@ def login(request):
             return render(request,'login.html', {'feedback':json.dumps("Please input correct username and password!")})   
     return render(request,'login.html')
 
-
 # Upload view
 @login_required
 def upload(request):
@@ -57,15 +56,7 @@ def upload(request):
         description = request.POST.get('description')
         tag_list = tag.split(',')
         if len(tag_list) > TAG_LIMIT:
-            return render(request,'upload.html', {'form':form, 'feedback':json.dumps("You have reached tag limit!")})    
-
-        for tag in tag_list: 
-            if not Tag.objects.filter(name=tag):
-                new_tag = Tag(name=tag)
-                new_tag.save()
-        if not Category.objects.filter(name=category):
-            new_category = Category(name=category)
-            new_category.save()             
+            return render(request,'upload.html', {'form':form, 'feedback':json.dumps("You have reached tag limit!")})               
         total = Image.objects.filter(owner=request.user).count()
         frequency = Image.objects.filter(owner=request.user, uploadtime=datetime.date.today()).count()
        
@@ -76,10 +67,17 @@ def upload(request):
             new_item.title = title 
             new_item.description = description    
             new_item.category = Category.objects.get(name=category)          
-            new_item.save() 
+            new_item.save()
+            for tag in tag_list: 
+                if not Tag.objects.filter(name=tag):
+                    new_tag = Tag(name=tag)
+                    new_tag.save()
+            if not Category.objects.filter(name=category):
+                new_category = Category(name=category)
+                new_category.save()   
             for item in tag_list:
                 new_item.tag.add(Tag.objects.get(name=item))         
-            return redirect(home)
+            return redirect(account)
         elif not form.is_valid():
             form=ImageForm()
             return render(request,'upload.html', {'form':form, 'feedback':json.dumps("Please submit JPEG file!")})   
@@ -93,67 +91,37 @@ def upload(request):
         form = ImageForm()
     return render(request, 'upload.html', {'form': form})
 
-
-# Search view
-def search(request):
-    #Extracting keyword to be matched to tag
- #    if request.method == 'GET':
- #        keyword = request.GET.get('keyword')
- #        return HttpResponse("keyword: %s" % keyword)
-    
-    # #Finding tag id of tag supplied as keyword
- #    tag_id_found = Tag.objects.get(name=keyword).id
-    
-    # #Finding corresponding image with specified tag
- #    all_images= Image.objects.all()
- #    result_images=[]
-
- #    for image in all_images:
- #        tags= image.tag.all()
- #    for tag in tags:
- #        if (tag==tag_id_found):
- #            result_images.append(image)
-    
-    # #Supply list of images to front end
-
-    
- #    context={
- #      'result_images': result_images
- #    }
-
-    return render(request, 'Search.html', {'images':'images'})
-
-    #return redirect('/home')
-
-
-def search0 (request):
+#search view
+def search (request):
     # Extracting keyword to be matched to tag
     if request.method == 'GET':
        keyword = request.GET.get('keyword')
     # Finding tag id of tag supplied as keyword
     try:
-        tag_id_found = Tag.objects.get(name=keyword)
+        tag_id_found = Tag.objects.get(name=str(keyword))
     except ObjectDoesNotExist:
         tag_id_found = None
-    # Finding corresponding image with specified tag
-    all_images= Image.objects.all()
-    result_images=[]
-    
-    for image in all_images:
-      tags= image.tag.all()
-      for tag in tags:
-          if (tag==tag_id_found):
-              result_images.append(image)
-    
-    if result_images == []:
-        return HttpResponse("Your search returns no results")
-    # Supply list of images to front end
 
+    # Finding corresponding image with specified tag   
+    result_images = Image.objects.filter(tag=tag_id_found)
     
     context={
       'result_images': result_images
     }    
 
-    return render(request, 'Search.html', context)
+    return render(request, 'search.html', context)
 
 #tags = Tag.objects.all()
+
+def account(request):
+    try:
+        image_found = Image.objects.filter(owner=request.user)
+    except ObjectDoesNotExist:
+        image_found = None
+    # Finding corresponding image with specified tag
+    
+    context={
+      'image_found': image_found
+    }  
+    
+    return render(request, 'myaccount.html', context)
