@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from .models import *
 from datetime import datetime, timedelta, date
@@ -22,6 +22,7 @@ from django.core.files.storage import FileSystemStorage
 from mainApp.models import *
 from mainApp.forms import ImageForm
 from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
 
 MAX_NUMBER=3
 MAX_FREQUENCY=4
@@ -30,7 +31,7 @@ TAG_LIMIT = 10
 
 
 def home(request):
-	return HttpResponse("This is main app")
+    return HttpResponse("This is main app")
 
 #login 
 def login(request):
@@ -46,7 +47,6 @@ def login(request):
 
 
 # Upload view
-@login_required
 @login_required
 def upload(request):
     if request.method == 'POST':
@@ -96,36 +96,64 @@ def upload(request):
 
 # Search view
 def search(request):
-	#Extracting keyword to be matched to tag
-	if request.method == 'GET':
-		keyword = request.GET.get('keyword')
-		
-	#Finding tag id of tag supplied as keyword
-	tag_id_found= Tag.objects.get(name=keyword).id
-	
-	#Finding corresponding image with specified tag
-	all_images= Image.objects.all()
-	result_images=[]
-	
-	for image in all_images:
-		tags= image.tag.all()
-		for tag in tags:
-			if (tag==tag_id_found):
-				result_images.append(image)
-	
-	#Supply list of images to front end
+    #Extracting keyword to be matched to tag
+ #    if request.method == 'GET':
+ #        keyword = request.GET.get('keyword')
+ #        return HttpResponse("keyword: %s" % keyword)
+    
+    # #Finding tag id of tag supplied as keyword
+ #    tag_id_found = Tag.objects.get(name=keyword).id
+    
+    # #Finding corresponding image with specified tag
+ #    all_images= Image.objects.all()
+ #    result_images=[]
 
-	
-	context={
-		'result_images': result_images
-	}
+ #    for image in all_images:
+ #        tags= image.tag.all()
+ #    for tag in tags:
+ #        if (tag==tag_id_found):
+ #            result_images.append(image)
+    
+    # #Supply list of images to front end
+
+    
+ #    context={
+ #      'result_images': result_images
+ #    }
+
+    return render(request, 'Search.html', {'images':'images'})
+
+    #return redirect('/home')
 
 
+def search0 (request):
+    # Extracting keyword to be matched to tag
+    if request.method == 'GET':
+       keyword = request.GET.get('keyword')
+    # Finding tag id of tag supplied as keyword
+    try:
+        tag_id_found = Tag.objects.get(name=keyword)
+    except ObjectDoesNotExist:
+        tag_id_found = None
+    # Finding corresponding image with specified tag
+    all_images= Image.objects.all()
+    result_images=[]
+    
+    for image in all_images:
+      tags= image.tag.all()
+      for tag in tags:
+          if (tag==tag_id_found):
+              result_images.append(image)
+    
+    if result_images == []:
+        return HttpResponse("Your search returns no results")
+    # Supply list of images to front end
 
+    
+    context={
+      'result_images': result_images
+    }    
 
-	return render(request, 'Search.html', context)
-
-	#return redirect('/home')
-
+    return render(request, 'Search.html', context)
 
 #tags = Tag.objects.all()
