@@ -10,6 +10,7 @@
   var fb = {{ feedback|safe}};
   window.alert(fb);
 </script>
+
 {% include 'base.html' %}
 <div class="banner_bottom">		
 <div class="about" id="about">
@@ -37,7 +38,28 @@
 	  </div>
 	  <div class="form-group">
 	    <label for="exampleFormControlSelect1">Category</label>
-	    <br> {{ form.category }}
+	    <br> <select type="text" class="form-control" name = "category" id="category">
+	      <option>Abstract</option>
+	      <option>Aerial</option>
+	      <option>Animals</option>
+	      <option>Architecture</option>
+	      <option>Black and White</option>
+	      <option>family</option>
+	      <option>Fashion</option>
+	      <option>Fine Art</option>
+	      <option>Food</option>
+	      <option>Journalism</option>
+	      <option>Landscape</option>
+	      <option>Macro</option>
+	      <option>Nature</option>
+	      <option>Night</option>
+	      <option>People</option>
+	      <option>Performing Arts</option>
+	      <option>Sport</option>
+	      <option>Still Life</option>
+	      <option>Street</option>
+	      <option>Travel</option>
+	    </select>
 	 </div>
 	  <div class="form-group">
 	    <label for="exampleFormControlTextarea1">Description</label>
@@ -53,4 +75,5 @@
  </div>
 
 {% endblock %}
+
 
