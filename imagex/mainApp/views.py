@@ -110,7 +110,38 @@ def search (request):
     }     
     return render(request, 'search.html', context)
 
-#tags = Tag.objects.all()
+def search_by_photographer(request):
+	if request.method=='GET':
+		photographer_name= request.GET.get('keyword')
+
+	try:
+		photographer_id= Member.objects.get(username=keyword)
+	except ObjectDoesNotExist:
+		photographer_id=None
+
+	result_images= Image.model.filter(owner=photographer_id)
+
+	context={
+		'result_images': result_images
+	}
+	return render(request, 'search.html', context)
+
+def search_by_category(request):
+	if request.method=='GET':
+		galler_name= request.GET.get('keyword')
+
+	try:
+		gallery_id= Gallery.objects.get(name=keyword)
+	except ObjectDoesNotExist:
+		gallery_id=None
+
+	result_images= Gallery.model.filter(gallery= gallery_id)
+
+	context={
+		'result_images': result_images
+	}
+	return render(request, 'search.html', context)
+
 
 def myaccount(request):
     try:
