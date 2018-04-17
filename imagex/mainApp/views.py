@@ -110,7 +110,7 @@ def search (request):
     }     
     return render(request, 'search.html', context)
 
-def search_by_photographer(request):
+def search_photographer(request):
 	if request.method=='GET':
 		photographer_name= request.GET.get('keyword')
 
@@ -126,7 +126,7 @@ def search_by_photographer(request):
 	}
 	return render(request, 'search.html', context)
 
-def search_by_category(request):
+def search_category(request):
 	if request.method=='GET':
 		galler_name= request.GET.get('keyword')
 
@@ -135,7 +135,7 @@ def search_by_category(request):
 	except ObjectDoesNotExist:
 		gallery_id=None
 
-	result_images= Gallery.model.filter(gallery= gallery_id)
+	result_images= Gallery.model.filter(gallery= gallery_id).image
 
 	context={
 		'result_images': result_images
