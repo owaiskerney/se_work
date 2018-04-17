@@ -159,6 +159,24 @@ def search (request):
     }     
     return render(request, 'search.html', context)
 
+def search_photographer(request):
+	 if request.method == 'GET':
+       photographer_name = request.GET.get('keyword')
+    # Finding tag id of tag supplied as keyword
+    try:
+        photographer_id_found = Member.objects.get(username=str(keyword))
+    except ObjectDoesNotExist:
+        photographer_id_found = None
+
+    # Finding corresponding image with specified tag   
+    result_images = Image.objects.filter(owner=photographer_id_found)
+    
+    context={
+      'result_images': result_images
+    }     
+    return render(request, 'search.html', context)
+
+
 @login_required
 def myaccount(request):
     try:
