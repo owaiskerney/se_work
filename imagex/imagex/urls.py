@@ -15,6 +15,8 @@ urlpatterns = [
     url(r'^signup/',views.signup, name='signup'),     
     url(r'^upload/', views.upload, name='upload'),
     url(r'^search/', views.search, name='search'),
+    url(r'^search_photographer/', views.search_photographer, name='search_photographer'),
+    url(r'^search_category/', views.search_category, name='search_category'),
     url(r'^myaccount/',views.myaccount, name='myaccount'),
     url(r'^password_change/',views.password_change, name='password_change'),
   	url(r'^password_reset/$', auth_views.password_reset,

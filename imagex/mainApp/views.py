@@ -26,8 +26,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.contrib import messages
 from django.contrib.auth.views import PasswordResetView
+from operator import attrgetter
 
 
+PHOTOGRAPHER_NAME=""
 MAX_NUMBER=100
 MAX_FREQUENCY=100
 TAG_LIMIT = 10
@@ -143,38 +145,72 @@ def upload(request):
 #search view
 def search (request):
     # Extracting keyword to be matched to tag
-    if request.method == 'GET':
-       keyword = request.GET.get('keyword')
+	if request.method == 'GET':
+		keyword = request.GET.get('keyword')
     # Finding tag id of tag supplied as keyword
-    try:
-        tag_id_found = Tag.objects.get(name=str(keyword))
-    except ObjectDoesNotExist:
-        tag_id_found = None
+	
+	
+	try:
+		tag_id_found = Tag.objects.get(name=str(keyword))
+	except ObjectDoesNotExist:
+		tag_id_found = None
 
     # Finding corresponding image with specified tag   
-    result_images = Image.objects.filter(tag=tag_id_found)
+	result_images = Image.objects.filter(tag=tag_id_found)
+
+    #Sorting images by recency as default
+	result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
+
     
-    context={
-      'result_images': result_images
-    }     
-    return render(request, 'search.html', context)
+	context={
+		'result_images': result_images
+	}     
+	return render(request, 'search.html', context)
+
+#search view
+def search_category (request):
+    # Extracting keyword to be matched to tag
+	if request.method == 'GET':
+		category_name = request.GET.get('category')
+    # Finding tag id of tag supplied as keyword
+	
+	
+	try:
+		cat_id_found = Category.objects.get(name=str(category_name))
+	except ObjectDoesNotExist:
+		cat_id_found = None
+
+    # Finding corresponding image with specified tag   
+	result_images = Image.objects.filter(category=cat_id_found)
+
+    #Sorting images by recency as default
+	result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
+
+    
+	context={
+		'result_images': result_images
+	}     
+	return render(request, 'search.html', context)
 
 def search_photographer(request):
-	 if request.method == 'GET':
-       photographer_name = request.GET.get('keyword')
+	if request.method == 'GET':
+		photographer_name = request.GET.get('photographer_name')
+
     # Finding tag id of tag supplied as keyword
-    try:
-        photographer_id_found = Member.objects.get(username=str(keyword))
-    except ObjectDoesNotExist:
-        photographer_id_found = None
+	
+	print(PHOTOGRAPHER_NAME)
+	try:
+		photographer_id_found = Member.objects.get(username=str(photographer_name))
+	except ObjectDoesNotExist:
+		photographer_id_found = None
 
     # Finding corresponding image with specified tag   
-    result_images = Image.objects.filter(owner=photographer_id_found)
+	result_images = Image.objects.filter(owner=photographer_id_found)
     
-    context={
-      'result_images': result_images
-    }     
-    return render(request, 'search.html', context)
+	context={
+ 		'result_images': result_images
+ 	}     
+	return render(request, 'search.html', context)
 
 
 @login_required

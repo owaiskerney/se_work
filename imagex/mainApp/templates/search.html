@@ -11,6 +11,9 @@
   {% include 'base.html' %}  
 {% endif %}
 
+
+
+
     <!--//banner_info-->
     <!--/ab-->
    <br><br><br><br> 
@@ -19,17 +22,31 @@
   <div class="ui left icon input">
     <form id='search_bar' action="/search" method = 'GET'> {% csrf_token %}
     <input class="prompt" type="text" name ="keyword" id="keyword" placeholder="Search Image">
-    <input type="submit" name="submit" id="submit" value="Search"></form>
+    <input type="submit" name="submit" id="submit" value="Search">
+    </form>
     <i class="github icon"></i>
   </div>
+  <form id="categories" action="/search_category" method = 'GET'> {% csrf_token %}
+  <button type="submit" class="btn btn-default" id="cat1" name="category" value="nature">Nature</button>
+  <button type="submit" class="btn btn-default" id="cat2" name="category" value="">Wildlife</button>
+  <button type="submit" class="btn btn-default" id="cat3" name="category" value="">Humans</button>
+  <button type="submit" class="btn btn-default" id="cat4" name="category" value="">Creatures</button>
+  <button type="submit" class="btn btn-default" id="cat5" name="category" value="">Monsters</button>
+  </form>
   <p>
+
     <label>
       <input type="radio" name="Sort By" value="likes" id="SortBy_0">
       Sort by Popularity</label>
     <br>
     <label>
       <input type="radio" name="Sort By" value="date" id="SortBy_1">
-      Most Recent</label>
+      Most Recent
+    </label>
+    <form id='search_photographer' action="/search_photographer" method = 'GET'> {% csrf_token %}
+      <button type="submit" class="btn btn-default" id="owais" name="photographer_name" value="">Search by Photographer</button>
+    </form>
+    
     <br>
     </p>    
     </div>
@@ -39,6 +56,29 @@
 <div class="inner_sec_info_wthree_agile">
       <!--/projects-->
       {% if result_images %}
+      <script>
+
+
+        $('#SortBy_0').click(function() {
+          if($('#SortBy_0').is(':checked')) { 
+            var val = document.getElementById("keyword").value;
+            alert(val); 
+            
+
+
+           }
+        });
+
+        $('#SortBy_1').click(function() {
+          if($('#SortBy_1').is(':checked')) { 
+            
+
+
+           }
+        });
+
+
+      </script>
       {% for img in result_images %}   
       <ul class="portfolio-area">     
             <li class="portfolio-item2" data-id="id-0" data-type="cat-item-4">
