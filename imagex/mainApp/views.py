@@ -155,6 +155,10 @@ def search (request):
 	except ObjectDoesNotExist:
 		tag_id_found = None
 
+	print(".............................................................")
+	print(tag_id_found)
+	print(".............................................................")
+
     # Finding corresponding image with specified tag   
 	result_images = Image.objects.filter(tag=tag_id_found)
 
@@ -172,14 +176,16 @@ def search_category (request):
     # Extracting keyword to be matched to tag
 	if request.method == 'GET':
 		category_name = request.GET.get('category')
-    # Finding tag id of tag supplied as keyword
+   
 	
 	
 	try:
 		cat_id_found = Category.objects.get(name=str(category_name))
 	except ObjectDoesNotExist:
 		cat_id_found = None
-
+	print(".............................................................")
+	print(cat_id_found)
+	print(".............................................................")
     # Finding corresponding image with specified tag   
 	if (cat_id_found!= None):
 
