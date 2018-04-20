@@ -202,7 +202,6 @@ def search_photographer(request):
 
     # Finding tag id of tag supplied as keyword
 	
-	print(PHOTOGRAPHER_NAME)
 	try:
 		photographer_id_found = Member.objects.get(username=str(photographer_name))
 	except ObjectDoesNotExist:
