@@ -181,10 +181,14 @@ def search_category (request):
 		cat_id_found = None
 
     # Finding corresponding image with specified tag   
-	result_images = Image.objects.filter(category=cat_id_found)
+	if (cat_id_found!= None):
 
-    #Sorting images by recency as default
-	result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
+		result_images = Image.objects.filter(category=cat_id_found)
+
+    	#Sorting images by recency as default
+		result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
+	else:
+		result_images=[]
 
     
 	context={
