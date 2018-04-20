@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^search/', views.search, name='search'),
     url(r'^search_photographer/', views.search_photographer, name='search_photographer'),
     url(r'^search_category/', views.search_category, name='search_category'),
+     url(r'^browse_by_popularity/', views.browse_by_popularity, name='browse_by_popularity'),
     url(r'^myaccount/',views.myaccount, name='myaccount'),
     url(r'^password_change/',views.password_change, name='password_change'),
   	url(r'^password_reset/$', auth_views.password_reset,

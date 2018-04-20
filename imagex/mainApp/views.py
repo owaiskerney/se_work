@@ -147,23 +147,48 @@ def search (request):
     # Extracting keyword to be matched to tag
 	if request.method == 'GET':
 		keyword = request.GET.get('keyword')
-    # Finding tag id of tag supplied as keyword
-	
-	
-	try:
-		tag_id_found = Tag.objects.get(name=str(keyword))
-	except ObjectDoesNotExist:
-		tag_id_found = None
+		category_name = request.GET.get('category')
 
-	print(".............................................................")
-	print(tag_id_found)
-	print(".............................................................")
+    # Finding tag id of tag supplied as keyword
+	result_images=[]
+	if(category_name != None and keyword== None):
+		try:
+			cat_id_found = Category.objects.get(name=str(category_name))
+		except ObjectDoesNotExist:
+			cat_id_found = None
+		print(".............................................................")
+		print(cat_id_found)
+		print(".............................................................")
+    # Finding corresponding image with specified tag   
+		if (cat_id_found!= None):
+
+			result_images = Image.objects.filter(category=cat_id_found)
+			print(".............................................................")
+			print(result_images)
+			print(".............................................................")
+
+    	#Sorting images by recency as default
+			result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
+		else:
+			result_images= Image.objects.filter(category=cat_id_found)
+
+
+	elif (keyword!= None and category_name== None):
+	
+		try:
+			tag_id_found = Tag.objects.get(name=str(keyword))
+		except ObjectDoesNotExist:
+			tag_id_found = None
+
+		print(".............................................................")
+		print(tag_id_found)
+		print(".............................................................")
 
     # Finding corresponding image with specified tag   
-	result_images = Image.objects.filter(tag=tag_id_found)
+		result_images = Image.objects.filter(tag=tag_id_found)
 
     #Sorting images by recency as default
-	result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
+		result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
 
     
 	context={
@@ -235,3 +260,20 @@ def myaccount(request):
     
     return render(request, 'myaccount.html', context)
 
+
+def browse_by_popularity(request):
+	if request.method == 'GET':
+		browse_by_popularity = request.GET.get('browse_popularity')
+
+    # Finding tag id of tag supplied as keyword
+	result_images=[]
+	if(browse_by_popularity == "True"):
+
+    # Finding corresponding image with specified tag   
+		result_images = Image.objects.all()
+		result_images=sorted(result_images, key=attrgetter('popularity'))
+    
+	context={
+ 		'result_images': result_images
+ 	}     
+	return render(request, 'search.html', context)
