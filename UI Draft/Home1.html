@@ -48,7 +48,24 @@
           <div id="navbar" class="navbar-collapse collapse">
             <div class="nav_right_top">
               <ul class="nav navbar-nav navbar-right">
-                <li><a class="request" href="signin.html">Log In</a></li>
+		<li class="My Account">      
+		{% if user.is_authenticated == True %}
+		 
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Invite <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="MyAccount.html">My Account</a></li>
+	            <li><a href="Logout.html">Logout</a></li>
+	            <li><a href="Changepassword.html">Change Password</a></li>
+                  </ul>
+                </li> 
+		{% else %}
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Invite <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="signup.html">Sign up</a></li>
+	            <li><a href="Login.html">Login</a></li>
+                  </ul>
+                </li>   
+		      
                 
               </ul>
               <ul class="nav navbar-nav">
