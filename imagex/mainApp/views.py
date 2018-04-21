@@ -238,6 +238,9 @@ def search_photographer(request):
 	except ObjectDoesNotExist:
 		photographer_id_found = None
 
+	print(".............................................................")
+	
+	print(".............................................................")
     # Finding corresponding image with specified tag   
 	result_images = Image.objects.filter(owner=photographer_id_found)
     
