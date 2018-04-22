@@ -29,8 +29,7 @@ from django.contrib.auth.views import PasswordResetView
 from operator import attrgetter
 from django.http import JsonResponse
 
-
-PHOTOGRAPHER_NAME=""
+LAST_SEARCH_KEYWORD=""
 MAX_NUMBER=100
 MAX_FREQUENCY=100
 TAG_LIMIT = 10
@@ -146,17 +145,21 @@ def upload(request):
 #search view
 def search (request):
     # Extracting keyword to be matched to tag
-	global PHOTOGRAPHER_NAME
+	global LAST_SEARCH_KEYWORD
+	
 	if request.method == 'GET':
 		keyword = request.GET.get('keyword')
-		if(keyword != None):
-			PHOTOGRAPHER_NAME=str(keyword)
+		if(keyword== None and LAST_SEARCH_KEYWORD!=""):
+			keyword=LAST_SEARCH_KEYWORD
+		elif(keyword != None and LAST_SEARCH_KEYWORD==""):
+			LAST_SEARCH_KEYWORD=str(keyword)
 		category_name = request.GET.get('category')
-		photographer_name=request.GET.get('photographer_name')
+		sort_by= request.GET.get('sort_by')
+
 
     # Finding tag id of tag supplied as keyword
 	result_images=[]
-	if(category_name != None and keyword== None and photographer_name==None):
+	if(category_name != None and keyword== None):
 		try:
 			cat_id_found = Category.objects.get(name=str(category_name))
 		except ObjectDoesNotExist:
@@ -178,36 +181,28 @@ def search (request):
 		#return JsonResponse({'result_images': list(result_images)})
 
 
-	elif (keyword!= None and category_name== None and photographer_name==None):
+	elif (keyword!= None and category_name== None):
 	
+		print(keyword)
 		try:
 			tag_id_found = Tag.objects.get(name=str(keyword))
 		except ObjectDoesNotExist:
 			tag_id_found = None
 
 	
-    # Finding corresponding image with specified tag   
-		result_images = Image.objects.filter(tag=tag_id_found)
+    # Finding corresponding image with specified tag
+		if(tag_id_found != None):   
+			result_images = Image.objects.filter(tag=tag_id_found)
 
     #Sorting images by recency as default
-		result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
-		context={
-		'result_images': result_images
-		} 
+			if(sort_by==None or str(sort_by)=="recency"):
+				result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
+			else:
+				result_images=sorted(result_images, key=attrgetter('like_stats'),reverse=True)
+			context={
+			'result_images': result_images
+			} 
 		#return JsonResponse({'result_images': list(result_images)})
-
-	elif (keyword== None and category_name== None and photographer_name!=None):
-		try:
-			photographer_id_found = Member.objects.get(username=str(photographer_name))
-		except ObjectDoesNotExist:
-			photographer_id_found = None
-
-    # Finding corresponding image with specified tag   
-		result_images = Image.objects.filter(owner=photographer_id_found)
-		context={
-		'result_images': result_images
-		} 
-		return JsonResponse({'result_images':context})
 
 
     
@@ -247,10 +242,10 @@ def search_category (request):
 	return render(request, 'search.html', context)
 
 def search_photographer(request):
-	global PHOTOGRAPHER_NAME
+	global LAST_SEARCH_KEYWORD
 	if request.method == 'GET':
 		#photographer_name = request.GET.get('photographer_name')
-		photographer_name = PHOTOGRAPHER_NAME
+		photographer_name = LAST_SEARCH_KEYWORD
 		print(".............................................................")
 		print(".............................................................")
 		print(".............................................................")
