@@ -63,7 +63,7 @@
       Most Recent
     </label>
   </form>
-    <form id='search_photographer' action="/search_photographer" method = 'GET'> {% csrf_token %}
+    <form id='search_photographer' action="/search" method = 'GET'> {% csrf_token %}
       <button type="submit" class="btn btn-default" id="owais" name="photographer_name" value="">Search by Photographer</button>
     </form>
     
@@ -118,8 +118,15 @@
           
                 </a>
                 </span>
-            <p class="like">&#10084;</p>
-              </div>
+            <div class="like_stats">
+            <p class="like">&#10084;</p> <p>{{img.like_stats}} </p>
+
+            </div>
+            <div class="download_stats">
+            <p class="download">Download</p>
+            <p>{{img.download_stats}}</p>
+
+            </div>
         
             </li>
           {% endfor %}      
