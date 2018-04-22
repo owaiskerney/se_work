@@ -30,6 +30,7 @@ from operator import attrgetter
 from django.http import JsonResponse
 
 LAST_SEARCH_KEYWORD=""
+LAST_SEARCH_KEYWORD_TYPE=""
 MAX_NUMBER=100
 MAX_FREQUENCY=100
 TAG_LIMIT = 10
@@ -146,14 +147,24 @@ def upload(request):
 def search (request):
     # Extracting keyword to be matched to tag
 	global LAST_SEARCH_KEYWORD
+	global LAST_SEARCH_KEYWORD_TYPE
 	
 	if request.method == 'GET':
 		keyword = request.GET.get('keyword')
+		category_name = request.GET.get('category')
 		if(keyword== None and LAST_SEARCH_KEYWORD!=""):
-			keyword=LAST_SEARCH_KEYWORD
+			keyword=LAST_SEARCH_KEYWORD		
+		elif(keyword==None and category_name!= None):
+			LAST_SEARCH_KEYWORD=""
+			LAST_SEARCH_KEYWORD_TYPE=""
 		elif(keyword != None and LAST_SEARCH_KEYWORD==""):
 			LAST_SEARCH_KEYWORD=str(keyword)
-		category_name = request.GET.get('category')
+			LAST_SEARCH_KEYWORD_TYPE= "photographer"
+		elif(keyword== None and LAST_SEARCH_KEYWORD_TYPE== "photographer"):
+			print("CHUTU WORKING")
+			search_photographer(request)
+
+		
 		sort_by= request.GET.get('sort_by')
 
 
@@ -169,21 +180,29 @@ def search (request):
 		if (cat_id_found!= None):
 
 			result_images = Image.objects.filter(category=cat_id_found)
+			
+			print(".............................................................")
+			print(".............................................................")
+			print(".............................................................")
+			print(cat_id_found)
+			print(".............................................................")
+			print(".............................................................")
+			print(".............................................................")
 		
 
     	#Sorting images by recency as default
 			result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
-		else:
-			result_images= Image.objects.filter(category=cat_id_found)
+	
 		context={
 		'result_images': result_images
 		} 
 		#return JsonResponse({'result_images': list(result_images)})
+		
 
 
 	elif (keyword!= None and category_name== None):
 	
-		print(keyword)
+		
 		try:
 			tag_id_found = Tag.objects.get(name=str(keyword))
 		except ObjectDoesNotExist:
@@ -191,7 +210,15 @@ def search (request):
 
 	
     # Finding corresponding image with specified tag
-		if(tag_id_found != None):   
+		if(tag_id_found != None):
+			print(".............................................................")
+			print(".............................................................")
+			print(".............................................................")
+			print(tag_id_found)
+			print(".............................................................")
+			print(".............................................................")
+			print(".............................................................")
+		   
 			result_images = Image.objects.filter(tag=tag_id_found)
 
     #Sorting images by recency as default
@@ -218,8 +245,6 @@ def search_category (request):
 	if request.method == 'GET':
 		category_name = request.GET.get('category')
    
-	
-	
 	try:
 		cat_id_found = Category.objects.get(name=str(category_name))
 	except ObjectDoesNotExist:
@@ -246,13 +271,8 @@ def search_photographer(request):
 	if request.method == 'GET':
 		#photographer_name = request.GET.get('photographer_name')
 		photographer_name = LAST_SEARCH_KEYWORD
-		print(".............................................................")
-		print(".............................................................")
-		print(".............................................................")
-		print(photographer_name)
-		print(".............................................................")
-		print(".............................................................")
-		print(".............................................................")
+		sort_by= request.GET.get('sort_by')
+		
 		
 
     # Finding tag id of tag supplied as keyword
@@ -264,6 +284,20 @@ def search_photographer(request):
 
     # Finding corresponding image with specified tag   
 	result_images = Image.objects.filter(owner=photographer_id_found)
+
+	if(str(sort_by)== "recency" or sort_by== None):
+		print(".............................................................")
+		print(".............................................................")
+		print(".............................................................")
+		print(photographer_name)
+		print(".............................................................")
+		print(".............................................................")
+		print(".............................................................")
+		result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
+	elif(str(sort_by)== "popularity"):
+		result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
+
+
     
 	context={
  		'result_images': result_images
