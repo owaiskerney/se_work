@@ -27,6 +27,7 @@ from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.contrib import messages
 from django.contrib.auth.views import PasswordResetView
 from operator import attrgetter
+from django.http import JsonResponse
 
 
 PHOTOGRAPHER_NAME=""
@@ -145,56 +146,76 @@ def upload(request):
 #search view
 def search (request):
     # Extracting keyword to be matched to tag
+	global PHOTOGRAPHER_NAME
 	if request.method == 'GET':
 		keyword = request.GET.get('keyword')
+		if(keyword != None):
+			PHOTOGRAPHER_NAME=str(keyword)
 		category_name = request.GET.get('category')
+		photographer_name=request.GET.get('photographer_name')
 
     # Finding tag id of tag supplied as keyword
 	result_images=[]
-	if(category_name != None and keyword== None):
+	if(category_name != None and keyword== None and photographer_name==None):
 		try:
 			cat_id_found = Category.objects.get(name=str(category_name))
 		except ObjectDoesNotExist:
 			cat_id_found = None
-		print(".............................................................")
-		print(cat_id_found)
-		print(".............................................................")
+
     # Finding corresponding image with specified tag   
 		if (cat_id_found!= None):
 
 			result_images = Image.objects.filter(category=cat_id_found)
-			print(".............................................................")
-			print(result_images)
-			print(".............................................................")
+		
 
     	#Sorting images by recency as default
 			result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
 		else:
 			result_images= Image.objects.filter(category=cat_id_found)
+		context={
+		'result_images': result_images
+		} 
+		#return JsonResponse({'result_images': list(result_images)})
 
 
-	elif (keyword!= None and category_name== None):
+	elif (keyword!= None and category_name== None and photographer_name==None):
 	
 		try:
 			tag_id_found = Tag.objects.get(name=str(keyword))
 		except ObjectDoesNotExist:
 			tag_id_found = None
 
-		print(".............................................................")
-		print(tag_id_found)
-		print(".............................................................")
-
+	
     # Finding corresponding image with specified tag   
 		result_images = Image.objects.filter(tag=tag_id_found)
 
     #Sorting images by recency as default
 		result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
+		context={
+		'result_images': result_images
+		} 
+		#return JsonResponse({'result_images': list(result_images)})
+
+	elif (keyword== None and category_name== None and photographer_name!=None):
+		try:
+			photographer_id_found = Member.objects.get(username=str(photographer_name))
+		except ObjectDoesNotExist:
+			photographer_id_found = None
+
+    # Finding corresponding image with specified tag   
+		result_images = Image.objects.filter(owner=photographer_id_found)
+		context={
+		'result_images': result_images
+		} 
+		return JsonResponse({'result_images':context})
+
 
     
 	context={
 		'result_images': result_images
 	}     
 	return render(request, 'search.html', context)
+	
 
 #search view
 def search_category (request):
@@ -208,9 +229,7 @@ def search_category (request):
 		cat_id_found = Category.objects.get(name=str(category_name))
 	except ObjectDoesNotExist:
 		cat_id_found = None
-	print(".............................................................")
-	print(cat_id_found)
-	print(".............................................................")
+	
     # Finding corresponding image with specified tag   
 	if (cat_id_found!= None):
 
@@ -228,8 +247,18 @@ def search_category (request):
 	return render(request, 'search.html', context)
 
 def search_photographer(request):
+	global PHOTOGRAPHER_NAME
 	if request.method == 'GET':
-		photographer_name = request.GET.get('photographer_name')
+		#photographer_name = request.GET.get('photographer_name')
+		photographer_name = PHOTOGRAPHER_NAME
+		print(".............................................................")
+		print(".............................................................")
+		print(".............................................................")
+		print(photographer_name)
+		print(".............................................................")
+		print(".............................................................")
+		print(".............................................................")
+		
 
     # Finding tag id of tag supplied as keyword
 	
@@ -238,9 +267,6 @@ def search_photographer(request):
 	except ObjectDoesNotExist:
 		photographer_id_found = None
 
-	print(".............................................................")
-	
-	print(".............................................................")
     # Finding corresponding image with specified tag   
 	result_images = Image.objects.filter(owner=photographer_id_found)
     
