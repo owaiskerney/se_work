@@ -113,20 +113,26 @@
                 <a class="image-zoom" href="{{img.image.url}}" rel="prettyPhoto[gallery]"> 
                     <img src="{{img.image.url}}" class="img-responsive" alt="">
                     <div class="port-info">
-                      <h5>View Image</h5>   
+                      <h5>View Image</h5>
+                       
                 </div>
+
           
                 </a>
                 </span>
+            <div class="owner_avatar">
+                      <img src="{{img.owner.avatar.url}}" alt="">
+
+            </div>  
             <div class="like_stats">
-            <p class="like">&#10084;</p> <p>{{img.like_stats}} </p>
+            <button class="like">&#10084;{{img.like_stats}} </button> 
 
             </div>
             <div class="download_stats">
-            <p class="download">Download</p>
-            <p>{{img.download_stats}}</p>
+            <button class="download">Download {{img.download_stats}} </button>
 
             </div>
+            
         
             </li>
           {% endfor %}      

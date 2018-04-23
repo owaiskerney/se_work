@@ -35,8 +35,8 @@ class Category(models.Model):
  
 
 
-	def __str__(self):
-		return self.name
+	#def __str__(self):
+	#	return self
 
 	class Meta: 
 		ordering = ['name']
