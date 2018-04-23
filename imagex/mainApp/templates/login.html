@@ -23,19 +23,17 @@
 			<div class="inner_sec_info_wthree_agile">
 				<div class="signin-form">
 					<div class="login-form-rec">
-						<form action="#" method="post">
+						<form action="" method="post">
 							{% csrf_token %}
 							<input type="text" name="username" placeholder="Username" required="">
 							<input type="password" name="password" placeholder="Password" required="">
 							<div class="tp">
-								<input type="submit" value="Signin">
+								<input type="submit" value="Signin"><br><br>
 							</div>
 						</form>
 					</div>
-					<div class="login-social-grids">
-						<ul>
-							<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-						</ul>
+					<a class="btn btn-outline-secondary" href="{% url 'password_reset' %}" role="button">Forget Password</a>
+					<a class="btn btn-outline-secondary" href="{% url 'signup' %}" role="button">Signup</a>
 					</div>
 				</div>
 			</div>

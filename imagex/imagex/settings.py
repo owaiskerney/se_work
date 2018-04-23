@@ -130,9 +130,16 @@ STATICFILES_DIRS = (
     ("bower_components", os.path.join(STATIC_ROOT, 'bower_components')),
 )
 
-MEDIA_URL = '/database/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'database')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = '/login'
 LOGOUT_UR = '/logout'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'imagexinnova@gmail.com'
+EMAIL_HOST_PASSWORD = 'innova123'
+EMAIL_PORT = 587

@@ -16,19 +16,19 @@
 {% else %}
   {% include 'base.html' %}  
 {% endif %}
-<br><br>
 <div class="banner_bottom"> 
   <div class="testimonials" id="testimonials">
-    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+<!--     <div id="myCarousel" class="carousel slide" data-ride="carousel"> -->
       <div class="carousel-inner" >
         <div class="item active">
-          <div class="person">    
-            <br><br><br><br><br><br><h5>This is user's self-description. And this description should be within 30 words. </h5>
-            <h5>user name</h5>
-            <h6 class="text-center"><a href="#">user_email@gmail.com</a></h6>
-            <h6><strong>Hong Kong</strong></h6>
-            <br><br><br><<br><br><br><br><br>
-          </div>
+          <div class="person">   
+            {% if user.avatar %}
+              <center><img src="{{ user.avatar.url }}" alt="" style="width:150px;height:150px;" class="img-circle"></center>
+            {% endif %}
+            
+            <h3><strong>{{ user.username }}</strong></h3>
+            <h5>{{ user.self_description }}</h5>
+<!--           </div> -->
         </div>
       </div>
     </div>
@@ -37,10 +37,9 @@
     <!--//banner_info-->
     <!--/ab-->
 <div class="banner_bottom">
-    <label for="search"></label>
+  <label for="search"></label>
   <div class="container">
-  <br><br>
-  <h3><strong>His/Her Collection</strong></h3>
+  <h3><strong>His/Her Collections</strong></h3>
   </div>
     {% if image_found %}
     {% for img in image_found %}   
@@ -55,10 +54,12 @@
                   </div>
               </a>
               </span>
-            </div>
-          <p class="like">&#10084;</p>       
+           
+            <class="like">&#10084;<button type="button" class="btn btn-sm btn-outline-primary">Download</button>
+            <a href="{% url 'delete' img_pk=img.id %}" type="submit" class="btn btn-sm btn-outline-primary" name="delete" onclick="return confirm('Are you sure you want to delete this image?')">Delete</a>    
+            </div>   
           </li>
-        {% endfor %}      
+        {% endfor %}     
       {% else %}
         <p> No results! </p>
       {% endif %}

@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 
 
-
 #class User(models.Model):
 #	def __str__(self):
 #		return self.title
@@ -20,8 +19,6 @@ class Tag(models.Model):
 	#search_tag function implementation
 	#Remember to fix url for this
 	#def search_tag(keyword):
-
-
 
 
 class Category(models.Model):
@@ -73,12 +70,9 @@ class Image(models.Model):
 #implementing retrieve_image function
 	#def retrieve_image(image_id):
 
-	
-
-
-
-
-
+class Token(models.Model):
+	email = models.EmailField(null = True, blank = True, max_length = 30)
+	tokenCode = models.IntegerField()
 
 class Gallery(models.Model):
 	name=models.CharField(max_length=20)
