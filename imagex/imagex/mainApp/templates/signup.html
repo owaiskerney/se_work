@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Signup</title>
+<!-- For-Mobile-Apps -->
+{% load staticfiles %}
+</head>
+<body>
+<script>
+  var fb = {{ feedback|safe}};
+  window.alert(fb);
+</script>
+
+{% if user.is_authenticated %}
+  {% include 'base_login.html' %}
+{% else %}
+  {% include 'base.html' %}  
+{% endif %}
+
+<br><br><center><form class="form" action="" method="post">
+
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="form-group">        
+        <label for="{{ form.old_password.id_for_label }}">Username</label>
+        {{ form.username }}<br>
+        {{ form.username.errors | striptags }}
+        {{ form.username.help_text|safe}}
+    </div>
+    <div class="form-group">
+        <label for="{{ form.password.id_for_label }}">Email</label>
+        {{ form.email }}<br>
+        {{ form.email.errors| striptags }}
+        {{ form.email.help_text|safe}}
+    </div>
+    <div class="form-group">        
+        <label for="{{ form.new_password2.id_for_label }}">Password</label>
+        {{ form.password1 }}<br>
+        {{ form.password1.errors| striptags }}
+        {{ form.password1.help_text|safe}}
+    </div>
+    <div class="form-group">        
+        <label for="{{ form.new_password2.id_for_label }}">Password Confirmation</label>
+        {{ form.password2 }}<br>
+        {{ form.password2.errors| striptags }}
+        {{ form.password2.help_text|safe}}
+    </div>
+    <div class="container">
+        <label for="token">Token</label>
+        <input type="text" class="form-control" name = "token" id="token">
+	</div><br>
+<!--     {% for field in form %}
+        <div class="fieldWrapper">
+            {{ field.help_text|safe }}
+        </div>
+    {% endfor %} -->
+    <br><br><button type="submit" class="btn btn-outline-secondary">Signup</button>
+</form></center>
+
+</body>
+</html>

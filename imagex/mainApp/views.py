@@ -25,10 +25,17 @@ from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.contrib import messages
+<<<<<<< HEAD
 import random
 from django.core.mail import EmailMessage
+=======
+from django.contrib.auth.views import PasswordResetView
+from operator import attrgetter
+from django.http import JsonResponse
+>>>>>>> 25204f03c6eb24abbafff6d454b7210cbc4eace4
 
-
+LAST_SEARCH_KEYWORD=""
+LAST_SEARCH_KEYWORD_TYPE=""
 MAX_NUMBER=100
 MAX_FREQUENCY=100
 TAG_LIMIT = 10
@@ -112,6 +119,7 @@ def upload(request):
             new_item=form.save(commit=False)
             new_item.owner = request.user
             new_item.title = title 
+<<<<<<< HEAD
             new_item.description = description          
              
             if not Category.objects.filter(name=category):
@@ -119,6 +127,16 @@ def upload(request):
                 new_category.save()   
             new_item.category = Category.objects.get(name=category)          
             new_item.save()  
+=======
+            new_item.description = description 
+            
+   			
+            if not Category.objects.filter(name=category):
+                new_category = Category(name=category)
+                new_category.save()   
+            new_item.category = Category.objects.get(name=category) 
+            new_item.save()         
+>>>>>>> 25204f03c6eb24abbafff6d454b7210cbc4eace4
             for tag in tag_list: 
                 if not Tag.objects.filter(name=tag):
                     new_tag = Tag(name=tag)
@@ -142,22 +160,213 @@ def upload(request):
 #search view
 def search (request):
     # Extracting keyword to be matched to tag
-    if request.method == 'GET':
-       keyword = request.GET.get('keyword')
+	global LAST_SEARCH_KEYWORD
+	global LAST_SEARCH_KEYWORD_TYPE
+	
+	if request.method == 'GET':
+		keyword = request.GET.get('keyword')
+		category_name = request.GET.get('category')
+		sort_by= request.GET.get('sort_by')
+		like_image= request.GET.get("like_image")
+
+
+		photographers=request.GET.get('photographers')
+		if (str(photographers) == "True"):
+			photographer_name=LAST_SEARCH_KEYWORD
+		else:
+			photographer_name= ""
+		
+		if(keyword== None and LAST_SEARCH_KEYWORD !="" and category_name==None and photographers==None and (sort_by!= None or like_image != None) and LAST_SEARCH_KEYWORD_TYPE=="Tag"):
+			keyword=LAST_SEARCH_KEYWORD
+		elif(keyword== None and LAST_SEARCH_KEYWORD !="" and category_name==None and photographers==None and LAST_SEARCH_KEYWORD_TYPE=="Photographer"and (sort_by!= None or like_image!= None)):
+			photographer_name=LAST_SEARCH_KEYWORD
+		elif(keyword== None and category_name==None and photographers==None and LAST_SEARCH_KEYWORD_TYPE=="Category" and (sort_by!= None or like_image!=None)):
+			print("HOREYAAAAAAAAAAA HAI")
+			category_name=LAST_SEARCH_KEYWORD
+		elif(keyword==None and category_name!= None):
+			LAST_SEARCH_KEYWORD=""
+			LAST_SEARCH_KEYWORD_TYPE=""
+		elif(keyword != None and LAST_SEARCH_KEYWORD==""):
+			LAST_SEARCH_KEYWORD=str(keyword)
+		elif(keyword!=None and LAST_SEARCH_KEYWORD!=""):
+			LAST_SEARCH_KEYWORD=str(keyword)
+
+		
     # Finding tag id of tag supplied as keyword
-    try:
-        tag_id_found = Tag.objects.get(name=str(keyword))
-    except ObjectDoesNotExist:
-        tag_id_found = None
+	result_images=[]
+	if(category_name != None and keyword== None and photographers== None):
+		LAST_SEARCH_KEYWORD= category_name
+		LAST_SEARCH_KEYWORD_TYPE= "Category"
+		try:
+			cat_id_found = Category.objects.get(name=str(category_name))
+		except ObjectDoesNotExist:
+			cat_id_found = None
 
     # Finding corresponding image with specified tag   
-    result_images = Image.objects.filter(tag=tag_id_found)
-    
-    context={
-      'result_images': result_images
-    }     
-    return render(request, 'search.html', context)
+		if (cat_id_found!= None):
 
+			result_images = Image.objects.filter(category=cat_id_found)
+			
+			print(".............................................................")
+			print(".............................................................")
+			print(".............................................................")
+			print(cat_id_found)
+			print(".............................................................")
+			print(".............................................................")
+			print(".............................................................")
+		
+
+    	#Sorting images by recency as default
+			result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
+	
+		context={
+		'result_images': result_images
+		} 
+		#return JsonResponse({'result_images': list(result_images)})
+		
+
+
+	elif (keyword!= None and category_name== None and photographers==None):
+		LAST_SEARCH_KEYWORD_TYPE= "Tag"
+		
+		try:
+			tag_id_found = Tag.objects.get(name=str(keyword))
+		except ObjectDoesNotExist:
+			tag_id_found = None
+
+	
+    # Finding corresponding image with specified tag
+		if(tag_id_found != None):
+			print(".............................................................")
+			print(".............................................................")
+			print(".............................................................")
+			print(tag_id_found)
+			print(".............................................................")
+			print(".............................................................")
+			print(".............................................................")
+		   
+			result_images = Image.objects.filter(tag=tag_id_found)
+
+    #Sorting images by recency as default
+			if(sort_by==None or str(sort_by)=="recency"):
+				result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
+			else:
+				result_images=sorted(result_images, key=attrgetter('like_stats'),reverse=True)
+			context={
+			'result_images': result_images
+			} 
+		#return JsonResponse({'result_images': list(result_images)})
+	elif( keyword== None and category_name== None and photographer_name!= ""):
+		LAST_SEARCH_KEYWORD_TYPE= "Photographer"
+		try:
+			photographer_id_found = Member.objects.get(username=str(photographer_name))
+		except ObjectDoesNotExist:
+			photographer_id_found = None
+
+
+		print(".............................................................")
+		print(".............................................................")
+		print(".............................................................")
+		print(photographer_name)
+		print(".............................................................")
+		print(".............................................................")
+		print(".............................................................")
+    # Finding corresponding image with specified tag   
+		result_images = Image.objects.filter(owner=photographer_id_found)
+
+		if(str(sort_by)== "recency"):
+			print(".............................................................")
+			print(".............................................................")
+			print(".............................................................")
+			print(photographer_name)
+			print(".............................................................")
+			print(".............................................................")
+			print(".............................................................")
+			result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
+		elif(str(sort_by)== "popularity"):
+			result_images=sorted(result_images, key=attrgetter('uploadtime'))
+
+
+    
+		context={
+ 			'result_images': result_images
+ 		}    
+
+
+    
+	context={
+		'result_images': result_images
+	}     
+	return render(request, 'search.html', context)
+	
+
+#search view
+def search_category (request):
+    # Extracting keyword to be matched to tag
+	if request.method == 'GET':
+		category_name = request.GET.get('category')
+   
+	try:
+		cat_id_found = Category.objects.get(name=str(category_name))
+	except ObjectDoesNotExist:
+		cat_id_found = None
+	
+    # Finding corresponding image with specified tag   
+	if (cat_id_found!= None):
+
+		result_images = Image.objects.filter(category=cat_id_found)
+
+    	#Sorting images by recency as default
+		result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
+	else:
+		result_images=[]
+
+    
+	context={
+		'result_images': result_images
+	}     
+	return render(request, 'search.html', context)
+
+<<<<<<< HEAD
+=======
+def search_photographer(request):
+	global LAST_SEARCH_KEYWORD
+	if request.method == 'GET':
+		photographer_name = LAST_SEARCH_KEYWORD
+		sort_by= request.GET.get('sort_by')
+		
+    # Finding tag id of tag supplied as keyword
+	
+	try:
+		photographer_id_found = Member.objects.get(username=str(photographer_name))
+	except ObjectDoesNotExist:
+		photographer_id_found = None
+
+    # Finding corresponding image with specified tag   
+	result_images = Image.objects.filter(owner=photographer_id_found)
+
+	if(str(sort_by)== "recency"):
+		
+		result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
+	elif(str(sort_by)== "popularity"):
+		print(".............................................................")
+		print(".............................................................")
+		print(".............................................................")
+		print(photographer_name)
+		print(".............................................................")
+		print(".............................................................")
+		print(".............................................................")
+		result_images=sorted(result_images, key=attrgetter('popularity'),reverse=True)
+
+
+    
+	context={
+ 		'result_images': result_images
+ 	}     
+	return render(request, 'search.html', context)
+
+
+>>>>>>> 25204f03c6eb24abbafff6d454b7210cbc4eace4
 @login_required
 def myaccount(request):
     try:
@@ -171,6 +380,7 @@ def myaccount(request):
     
     return render(request, 'myaccount.html', context)
 
+<<<<<<< HEAD
 @login_required
 def delete(request,img_pk):
     try:
@@ -216,3 +426,55 @@ def edit_profile(request):
     else: 
         form = EditProfileForm(instance=request.user)
     return render(request,'edit_profile.html',{'form':form})
+=======
+
+def browse_by_popularity(request):
+	if request.method == 'GET':
+		browse_by_popularity = request.GET.get('browse_popularity')
+
+    # Finding tag id of tag supplied as keyword
+	result_images=[]
+	if(browse_by_popularity == "True"):
+
+    # Finding corresponding image with specified tag   
+		result_images = Image.objects.all()
+		result_images=sorted(result_images, key=attrgetter('popularity'))
+    
+	context={
+ 		'result_images': result_images
+ 	}     
+	return render(request, 'search.html', context)
+
+def browse_by_popularity_homepage(request):
+	if request.method == 'GET':
+		browse_by_popularity = request.GET.get('browse_popularity')
+
+    # Finding tag id of tag supplied as keyword
+	result_images=[]
+	if(browse_by_popularity == None):
+
+    # Finding corresponding image with specified tag   
+		result_images = Image.objects.all()
+		result_images=sorted(result_images, key=attrgetter('popularity'))
+    
+	context={
+ 		'result_images': result_images
+ 	}     
+	return render(request, 'homepage.html', context)
+
+@login_required
+def like_images(request):
+	if request.method == 'GET':
+		like_image= request.GET.get("like_image")
+
+	img= Image.objects.filter(id=like_image)
+
+	for result in img:
+		result.like_stats= result.like_stats+1
+		result.save()
+
+
+
+	return search(request)
+
+>>>>>>> 25204f03c6eb24abbafff6d454b7210cbc4eace4

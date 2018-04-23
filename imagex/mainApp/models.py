@@ -29,8 +29,11 @@ class Category(models.Model):
 		['Night','Night'],['People','People'],['Performing Arts','Performing Arts'],['Sport','Sport'],['Still Life','Still Life'],\
 		['Street','Street'],['Travel','Travel']))
 
-	def __str__(self):
-		return self.name
+ 
+
+
+	#def __str__(self):
+	#	return self
 
 	class Meta: 
 		ordering = ['name']
@@ -62,10 +65,18 @@ class Image(models.Model):
 	owner = models.ForeignKey(Member, on_delete=models.CASCADE, blank=True) #temporary use for demo
 	like_stats=models.IntegerField(default=0)
 	download_stats=models.IntegerField(default=0)
+	popularity=models.IntegerField(default=0)
 	# user=models.ManyToManyField(User)
 	
 	def __str__(self):
 		return self.title
+
+	def save(self, *args, **kwargs):
+        
+		self.popularity = self.like_stats + self.download_stats
+		return super(Image, self).save(*args, **kwargs)
+
+
 
 #implementing retrieve_image function
 	#def retrieve_image(image_id):

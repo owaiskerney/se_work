@@ -11,6 +11,9 @@
   {% include 'base.html' %}  
 {% endif %}
 
+
+
+
     <!--//banner_info-->
     <!--/ab--> 
   <div class="banner_bottom">
@@ -18,19 +21,59 @@
   <div class="ui left icon input">
     <form id='search_bar' action="/search" method = 'GET'> {% csrf_token %}
     <input class="prompt" type="text" name ="keyword" id="keyword" placeholder="Search Image">
-    <input type="submit" name="submit" id="submit" value="Search"></form>
+    <input type="submit" name="submit" id="submit" value="Search">
+    </form>
     <i class="github icon"></i>
   </div>
+  <form id="categories" action="/search" method = 'GET'> 
+  <button type="submit" class="btn btn-default" id="cat1" name="category" value="Abstract">Abstract</button>
+  <button type="submit" class="btn btn-default" id="cat2" name="category" value="Aerial">Aerial</button>
+  <button type="submit" class="btn btn-default" id="cat3" name="category" value="Animals">Animals</button>
+  <button type="submit" class="btn btn-default" id="cat4" name="category" value="Architecture">Architecture</button>
+  <button type="submit" class="btn btn-default" id="cat5" name="category" value="Black and White">Black and White</button>
+  <button type="submit" class="btn btn-default" id="cat6" name="category" value="Family">Family</button>
+  <button type="submit" class="btn btn-default" id="cat7" name="category" value="Fashion">Fashion</button>
+  <button type="submit" class="btn btn-default" id="cat8" name="category" value="Fine Art">Fine Art</button>
+  <button type="submit" class="btn btn-default" id="cat9" name="category" value="Food">Food</button>
+  <button type="submit" class="btn btn-default" id="cat10" name="category" value="Journalism">Journalism</button>
+  <button type="submit" class="btn btn-default" id="cat11" name="category" value="Landscape">Landscape</button>
+  <button type="submit" class="btn btn-default" id="cat12" name="category" value="Macro">Macro</button>
+  <button type="submit" class="btn btn-default" id="cat13" name="category" value="Nature">Nature</button>
+  <button type="submit" class="btn btn-default" id="cat14" name="category" value="Night">Night</button>
+  <button type="submit" class="btn btn-default" id="cat15" name="category" value="People">People</button>
+  <button type="submit" class="btn btn-default" id="cat16" name="category" value="Night">Night</button>
+  <button type="submit" class="btn btn-default" id="cat17" name="category" value="Performing Arts">Performing Arts</button>
+  <button type="submit" class="btn btn-default" id="cat18" name="category" value="Sport">Sport</button>
+  <button type="submit" class="btn btn-default" id="cat19" name="category" value="Still Life">Still Life</button>
+  <button type="submit" class="btn btn-default" id="cat20" name="category" value="Street">Street</button>
+  <button type="submit" class="btn btn-default" id="cat21" name="category" value="Travel">Travel</button>
+  </form>
   <p>
+  
+
     <label>
-      <input type="radio" name="Sort By" value="likes" id="SortBy_0">
-      Sort by Popularity</label>
+    <form id='sort_results' action="/search" method = 'GET'> {% csrf_token %}
+      <input type="radio" name="sort_by" value="popularity" id="SortBy_0">
+      Sort by Popularity
+    </label>
     <br>
     <label>
-      <input type="radio" name="Sort By" value="date" id="SortBy_1">
-      Most Recent</label>
+      <input type="radio" name="sort_by" value="recency" id="SortBy_1">
+      Most Recent
+    </label>
+  </form>
+    <form id='search_photographer' action="/search" method = 'GET'> {% csrf_token %}
+      <button type="submit" class="btn btn-default" id="photographers" name="photographers" value="True">Search by Photographer</button>
+    </form>
+    
     <br>
-    </p>    
+    
+    </p>
+    <br>  
+    <form id='browse_by_popularity' action="/browse_by_popularity" method = 'GET'> 
+      <button type="submit" class="btn btn-default" id="browse_popularity" name="browse_popularity" value="True">Browse most popular photos</button>
+  </form>
+
     </div>
 
    
@@ -38,6 +81,29 @@
 <div class="inner_sec_info_wthree_agile">
       <!--/projects-->
       {% if result_images %}
+      <script>
+
+
+        $('#SortBy_0').click(function() {
+          if($('#SortBy_0').is(':checked')) {
+            alert("KERNS");
+            $('#sort_results').submit();
+            
+
+
+           }
+        });
+
+        $('#SortBy_1').click(function() {
+          if($('#SortBy_1').is(':checked')) { 
+             $('#sort_results').submit();
+
+
+           }
+        });
+
+
+      </script>
       {% for img in result_images %}   
       <ul class="portfolio-area">     
             <li class="portfolio-item2" data-id="id-0" data-type="cat-item-4">
@@ -46,13 +112,35 @@
                 <a class="image-zoom" href="{{img.image.url}}" rel="prettyPhoto[gallery]"> 
                     <img src="{{img.image.url}}" class="img-responsive" alt="">
                     <div class="port-info">
-                      <h5>View Image</h5>   
+                      <h5>View Image</h5>
+                       
                 </div>
+
           
                 </a>
                 </span>
+<<<<<<< HEAD
                   <p class="like">&#10084;</p><button type="button" class="btn btn-sm btn-outline-primary">Download</button> 
               </div>
+=======
+            <div class="owner_avatar">
+                      <img src="{{img.owner.avatar}}" alt="">
+
+            </div>  
+            <div class="like_stats">
+                <form id='like' action="/like_images" method = 'GET'> 
+                  <button type="submit" class="btn btn-default" id="like_image" name="like_image" value="{{img.id}}" >&#10084;{{img.like_stats}} </button>
+                </form>
+             
+
+            </div>
+
+            <div class="download_stats">
+            <button class="download">Download {{img.download_stats}} </button>
+
+            </div>
+            
+>>>>>>> 25204f03c6eb24abbafff6d454b7210cbc4eace4
         
             </li>
           {% endfor %}      
