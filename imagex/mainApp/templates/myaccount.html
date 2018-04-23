@@ -56,7 +56,16 @@
               </a>
               </span>
             </div>
-          <p class="like">&#10084; </p>  
+          <a href="ImageInfo.html">ImageInfo</a>
+						 {% if user.is_authenticated == False or status == 0 %}
+        
+        					{% elif status == 1 %}
+           					 <input class="like" type="button" id="likeButton" onclick="like({{ model.image }});" value="Unlike"></input>&#10084;<br>
+       					 {% else %}
+           					 <input class="like" type="button" id="likeButton" onclick="like({{ model.image }});" value="Like"></input><br>
+					          
+        				{% endif %}
+					         <a href="{{ model.imageFile.url }}" Download="{{ image.title }}" onclick="post('')" >Download</a><br>  
           <input type="button" value="Delete" onclick="location.href=deleteImg.html'">
           </li>
         {% endfor %}      
@@ -111,7 +120,15 @@
       });
 
     });
+      
   </script>
+    <script>
+        $(function () {            
+            $(".like").click(function () {
+                $(this).toggleClass('cs');                
+            })
+        })
+    </script>
     <a href="#home" class="scroll" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
     <!-- jQuery-Photo-filter-lightbox-Gallery-plugin -->
     <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
