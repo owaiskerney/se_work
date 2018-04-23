@@ -217,6 +217,8 @@ def search (request):
 	elif (keyword!= None and category_name== None and photographers==None):
 		LAST_SEARCH_KEYWORD_TYPE= "Tag"
 		
+		
+		
 		try:
 			tag_id_found = Tag.objects.get(name=str(keyword))
 		except ObjectDoesNotExist:
