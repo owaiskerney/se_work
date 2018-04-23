@@ -25,9 +25,14 @@ from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.contrib import messages
+<<<<<<< HEAD
+import random
+from django.core.mail import EmailMessage
+=======
 from django.contrib.auth.views import PasswordResetView
 from operator import attrgetter
 from django.http import JsonResponse
+>>>>>>> 25204f03c6eb24abbafff6d454b7210cbc4eace4
 
 LAST_SEARCH_KEYWORD=""
 LAST_SEARCH_KEYWORD_TYPE=""
@@ -55,10 +60,21 @@ def login_view(request):
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
-
+        tokenCode = request.POST.get('token')
+        memberEmail = '#'
         if form.is_valid():
-            form.save()
-            return redirect(login)
+            memberEmail = form.cleaned_data.get('email')
+            tokens = Token.objects.filter(tokenCode=tokenCode)            
+            token_available = False
+            for token in tokens:
+                if token.email == memberEmail:
+                    token_available = True
+
+            if token_available == False:
+                return HttpResponse ("Unavailable token!")
+            else: 
+                form.save()
+                return redirect(login_view)
     else:
         form = SignupForm()
 
@@ -85,20 +101,6 @@ def password_change(request):
     return render(request, 'password_change.html',{'form':form})
 
 @login_required
-def password_reset_view(request):
-    if request.method == 'POST':
-        form = PasswordResetForm(user=request.user, data=request.POST)
-        if form.is_valid():
-            # try:
-            #     member_id_found = Member.objects.get(email=email)
-            # except ObjectDoesNotExist:
-            #     member_id_found = None
-            #     return HttpResponse("Email not found!")
-            # if(member_id_found)
-            password_reset(request,user)
-    return render(request,'password_reset.html')
-
-@login_required
 def upload(request):
     if request.method == 'POST':
         form= ImageForm(request.POST, request.FILES)
@@ -117,6 +119,15 @@ def upload(request):
             new_item=form.save(commit=False)
             new_item.owner = request.user
             new_item.title = title 
+<<<<<<< HEAD
+            new_item.description = description          
+             
+            if not Category.objects.filter(name=category):
+                new_category = Category(name=category)
+                new_category.save()   
+            new_item.category = Category.objects.get(name=category)          
+            new_item.save()  
+=======
             new_item.description = description 
             
    			
@@ -125,6 +136,7 @@ def upload(request):
                 new_category.save()   
             new_item.category = Category.objects.get(name=category) 
             new_item.save()         
+>>>>>>> 25204f03c6eb24abbafff6d454b7210cbc4eace4
             for tag in tag_list: 
                 if not Tag.objects.filter(name=tag):
                     new_tag = Tag(name=tag)
@@ -317,6 +329,8 @@ def search_category (request):
 	}     
 	return render(request, 'search.html', context)
 
+<<<<<<< HEAD
+=======
 def search_photographer(request):
 	global LAST_SEARCH_KEYWORD
 	if request.method == 'GET':
@@ -354,6 +368,7 @@ def search_photographer(request):
 	return render(request, 'search.html', context)
 
 
+>>>>>>> 25204f03c6eb24abbafff6d454b7210cbc4eace4
 @login_required
 def myaccount(request):
     try:
@@ -367,6 +382,53 @@ def myaccount(request):
     
     return render(request, 'myaccount.html', context)
 
+<<<<<<< HEAD
+@login_required
+def delete(request,img_pk):
+    try:
+        results_image = Image.objects.filter(id=img_pk,owner=request.user)
+    except:
+        results_image = None
+    if results_image: 
+        results_image.delete()
+        return redirect(myaccount)
+    else:
+        return HttpResponse("You are not allowed to delete it!")
+    context={
+      'results_image': results_image
+    }   
+    return render(request, 'myaccount.html',context)
+
+@login_required
+def invite(request):
+    if request.method == 'GET':
+        email = request.GET.get('invite_email')
+        if email:
+            tokenCode = random.randint(100000,999999)
+            Token.objects.create(email = email, tokenCode = tokenCode).save()
+            email_body = 'Your invitation token is ' + str(tokenCode)
+            sentEmail = EmailMessage ('Invitation from imageX', email_body, to=[email])
+            sentEmail.send()
+            return redirect(invite_done)
+    else: 
+        return HttpResponse("Error")
+    return render(request, 'invite.html')
+
+@login_required
+def invite_done(request):
+    return render(request,'invite_done.html')
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect(myaccount)
+    else: 
+        form = EditProfileForm(instance=request.user)
+    return render(request,'edit_profile.html',{'form':form})
+=======
 
 def browse_by_popularity(request):
 	if request.method == 'GET':
@@ -417,3 +479,4 @@ def like_images(request):
 
 	return search(request)
 
+>>>>>>> 25204f03c6eb24abbafff6d454b7210cbc4eace4

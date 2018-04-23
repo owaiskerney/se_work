@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,4 +34,41 @@
 	</div>
 {% endblock %}
 </body>
+=======
+<!DOCTYPE html>
+<html>
+<head>
+<title>Invite People</title>
+{% load staticfiles %}
+</head>
+<body>
+{% if user.is_authenticated %}
+  {% include 'base_login.html' %}
+{% else %}
+  {% include 'base.html' %}  
+{% endif %}
+	
+{% block content %}
+		<!-- /inner_content -->
+<div class="banner_bottom">
+		<div class="container">
+				<h3>Invite a new member by email</h3><br>
+                <form id='invite_bar' action="/invite" method = 'GET'> 	
+                	<input type="email"class="prompt"  name ="invite_email" id="invite_email" placeholder = "email">
+ 				  
+ 					<div><br></div>
+ 				  	
+ 				  	<button type="submit" class="btn btn-outline-secondary">Invite</button>
+				</form>			
+				</div>
+           	
+			
+					
+				<div class="clearfix"> </div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+</body>
+>>>>>>> d1114cd394bc9bc203305f7c572cdd5c61446d93
 </html>
