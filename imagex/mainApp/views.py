@@ -155,21 +155,36 @@ def search (request):
 		keyword = request.GET.get('keyword')
 		category_name = request.GET.get('category')
 		sort_by= request.GET.get('sort_by')
-		photographer_name=LAST_SEARCH_KEYWORD
-		if(keyword== None and LAST_SEARCH_KEYWORD!="" and LAST_SEARCH_KEYWORD_TYPE!= "photographer" and category_name==None):
-			keyword=LAST_SEARCH_KEYWORD		
+		like_image= request.GET.get("like_image")
+
+
+		photographers=request.GET.get('photographers')
+		if (str(photographers) == "True"):
+			photographer_name=LAST_SEARCH_KEYWORD
+		else:
+			photographer_name= ""
+		
+		if(keyword== None and LAST_SEARCH_KEYWORD !="" and category_name==None and photographers==None and (sort_by!= None or like_image != None) and LAST_SEARCH_KEYWORD_TYPE=="Tag"):
+			keyword=LAST_SEARCH_KEYWORD
+		elif(keyword== None and LAST_SEARCH_KEYWORD !="" and category_name==None and photographers==None and LAST_SEARCH_KEYWORD_TYPE=="Photographer"and (sort_by!= None or like_image!= None)):
+			photographer_name=LAST_SEARCH_KEYWORD
+		elif(keyword== None and category_name==None and photographers==None and LAST_SEARCH_KEYWORD_TYPE=="Category" and (sort_by!= None or like_image!=None)):
+			print("HOREYAAAAAAAAAAA HAI")
+			category_name=LAST_SEARCH_KEYWORD
 		elif(keyword==None and category_name!= None):
 			LAST_SEARCH_KEYWORD=""
 			LAST_SEARCH_KEYWORD_TYPE=""
 		elif(keyword != None and LAST_SEARCH_KEYWORD==""):
 			LAST_SEARCH_KEYWORD=str(keyword)
-			LAST_SEARCH_KEYWORD_TYPE= "photographer"
 		elif(keyword!=None and LAST_SEARCH_KEYWORD!=""):
 			LAST_SEARCH_KEYWORD=str(keyword)
+
 		
     # Finding tag id of tag supplied as keyword
 	result_images=[]
-	if(category_name != None and keyword== None):
+	if(category_name != None and keyword== None and photographers== None):
+		LAST_SEARCH_KEYWORD= category_name
+		LAST_SEARCH_KEYWORD_TYPE= "Category"
 		try:
 			cat_id_found = Category.objects.get(name=str(category_name))
 		except ObjectDoesNotExist:
@@ -199,8 +214,8 @@ def search (request):
 		
 
 
-	elif (keyword!= None and category_name== None):
-	
+	elif (keyword!= None and category_name== None and photographers==None):
+		LAST_SEARCH_KEYWORD_TYPE= "Tag"
 		
 		try:
 			tag_id_found = Tag.objects.get(name=str(keyword))
@@ -229,12 +244,21 @@ def search (request):
 			'result_images': result_images
 			} 
 		#return JsonResponse({'result_images': list(result_images)})
-	elif( keyword== None and category_name== None and photographer_name!= None):
+	elif( keyword== None and category_name== None and photographer_name!= ""):
+		LAST_SEARCH_KEYWORD_TYPE= "Photographer"
 		try:
 			photographer_id_found = Member.objects.get(username=str(photographer_name))
 		except ObjectDoesNotExist:
 			photographer_id_found = None
 
+
+		print(".............................................................")
+		print(".............................................................")
+		print(".............................................................")
+		print(photographer_name)
+		print(".............................................................")
+		print(".............................................................")
+		print(".............................................................")
     # Finding corresponding image with specified tag   
 		result_images = Image.objects.filter(owner=photographer_id_found)
 
@@ -248,7 +272,7 @@ def search (request):
 			print(".............................................................")
 			result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
 		elif(str(sort_by)== "popularity"):
-			result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
+			result_images=sorted(result_images, key=attrgetter('uploadtime'))
 
 
     
@@ -308,6 +332,9 @@ def search_photographer(request):
 	result_images = Image.objects.filter(owner=photographer_id_found)
 
 	if(str(sort_by)== "recency"):
+		
+		result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
+	elif(str(sort_by)== "popularity"):
 		print(".............................................................")
 		print(".............................................................")
 		print(".............................................................")
@@ -315,9 +342,7 @@ def search_photographer(request):
 		print(".............................................................")
 		print(".............................................................")
 		print(".............................................................")
-		result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
-	elif(str(sort_by)== "popularity"):
-		result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
+		result_images=sorted(result_images, key=attrgetter('popularity'),reverse=True)
 
 
     
@@ -357,3 +382,36 @@ def browse_by_popularity(request):
  		'result_images': result_images
  	}     
 	return render(request, 'search.html', context)
+
+def browse_by_popularity_homepage(request):
+	if request.method == 'GET':
+		browse_by_popularity = request.GET.get('browse_popularity')
+
+    # Finding tag id of tag supplied as keyword
+	result_images=[]
+	if(browse_by_popularity == None):
+
+    # Finding corresponding image with specified tag   
+		result_images = Image.objects.all()
+		result_images=sorted(result_images, key=attrgetter('popularity'))
+    
+	context={
+ 		'result_images': result_images
+ 	}     
+	return render(request, 'homepage.html', context)
+
+@login_required
+def like_images(request):
+	if request.method == 'GET':
+		like_image= request.GET.get("like_image")
+
+	img= Image.objects.filter(id=like_image)
+
+	for result in img:
+		result.like_stats= result.like_stats+1
+		result.save()
+
+
+
+	return search(request)
+

@@ -64,7 +64,7 @@
     </label>
   </form>
     <form id='search_photographer' action="/search" method = 'GET'> {% csrf_token %}
-      <button type="submit" class="btn btn-default" id="owais" name="photographer_name" value="">Search by Photographer</button>
+      <button type="submit" class="btn btn-default" id="photographers" name="photographers" value="True">Search by Photographer</button>
     </form>
     
     <br>
@@ -125,9 +125,13 @@
 
             </div>  
             <div class="like_stats">
-            <button class="like">&#10084;{{img.like_stats}} </button> 
+                <form id='like' action="/like_images" method = 'GET'> 
+                  <button type="submit" class="btn btn-default" id="like_image" name="like_image" value="{{img.id}}" >&#10084;{{img.like_stats}} </button>
+                </form>
+             
 
             </div>
+
             <div class="download_stats">
             <button class="download">Download {{img.download_stats}} </button>
 
