@@ -69,6 +69,7 @@ class Image(models.Model):
 	like_stats=models.IntegerField(default=0)
 	download_stats=models.IntegerField(default=0)
 	popularity=models.IntegerField(default=0)
+	#liked_by=models.ManyToManyField(Member, blank=True,)
 	# user=models.ManyToManyField(User)
 	
 	def __str__(self):
