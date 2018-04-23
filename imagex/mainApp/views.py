@@ -156,7 +156,7 @@ def search (request):
 		category_name = request.GET.get('category')
 		sort_by= request.GET.get('sort_by')
 		photographer_name=LAST_SEARCH_KEYWORD
-		if(keyword== None and LAST_SEARCH_KEYWORD!="" and LAST_SEARCH_KEYWORD_TYPE!= "photographer"):
+		if(keyword== None and LAST_SEARCH_KEYWORD!="" and LAST_SEARCH_KEYWORD_TYPE!= "photographer" and category_name==None):
 			keyword=LAST_SEARCH_KEYWORD		
 		elif(keyword==None and category_name!= None):
 			LAST_SEARCH_KEYWORD=""
@@ -164,13 +164,9 @@ def search (request):
 		elif(keyword != None and LAST_SEARCH_KEYWORD==""):
 			LAST_SEARCH_KEYWORD=str(keyword)
 			LAST_SEARCH_KEYWORD_TYPE= "photographer"
+		elif(keyword!=None and LAST_SEARCH_KEYWORD!=""):
+			LAST_SEARCH_KEYWORD=str(keyword)
 		
-			
-
-		
-		
-
-
     # Finding tag id of tag supplied as keyword
 	result_images=[]
 	if(category_name != None and keyword== None):
