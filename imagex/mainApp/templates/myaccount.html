@@ -56,7 +56,7 @@
               </span>
 <<<<<<< HEAD
            
-            <class="like">&#10084;  <a href="{{img.image.url}} download"> <button type="button" class="btn btn-sm btn-outline-primary" >Download</button>
+            <class="like">&#10084;  <a href="{{img.image.url}} download"> <button type="button" class="btn btn-sm btn-outline-primary" onclick="post('')">Download {{img.download_stats}}</button>
 						  </a>
             <a href="{% url 'delete' img_pk=img.id %}" type="submit" class="btn btn-sm btn-outline-primary" name="delete" onclick="return confirm('Are you sure you want to delete this image?')">Delete</a>    
             </div>   
@@ -71,7 +71,7 @@
            					 <input class="like" type="button" id="likeButton" onclick="like({{ model.image }});" value="Like"></input><br>
 					          
         				{% endif %}
-					        <a href="{{img.image.url}} download"> <button type="button" class="btn btn-sm btn-outline-primary" onclick="post('')">Download</button>
+					        <a href="{{img.image.url}} download"> <button type="button" class="btn btn-sm btn-outline-primary" onclick="post('')">Download {{img.download_stats}}</button>
 						  </a>  
           <input type="button" value="Delete" onclick="location.href=deleteImg.html'">
 >>>>>>> 25204f03c6eb24abbafff6d454b7210cbc4eace4
