@@ -478,5 +478,19 @@ def like_images(request):
 
 
 	return search(request)
+@login_required
+def download_images(request):
+	if request.method == 'POST':
+		download_image= request.POST.get("download_image")
+
+	img= Image.objects.filter(id=download_image)
+
+	for result in img:
+		result.download_stats= result.download_stats+1
+		result.save()
+
+
+
+	return search(request)
 
 >>>>>>> 25204f03c6eb24abbafff6d454b7210cbc4eace4
