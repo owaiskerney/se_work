@@ -71,7 +71,8 @@
            					 <input class="like" type="button" id="likeButton" onclick="like({{ model.image }});" value="Like"></input><br>
 					          
         				{% endif %}
-					         <a href="{{ model.imageFile.url }}" Download="{{ image.title }}" onclick="post('')" >Download</a><br>  
+					        <a href="{{img.image.url}} download"> <button type="button" class="btn btn-sm btn-outline-primary" onclick="post('')">Download</button>
+						  </a>  
           <input type="button" value="Delete" onclick="location.href=deleteImg.html'">
 >>>>>>> 25204f03c6eb24abbafff6d454b7210cbc4eace4
           </li>
