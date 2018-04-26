@@ -45,36 +45,39 @@ TAG_LIMIT = 10
 def home(request):
     return HttpResponse("This is main app")
 
-#login 
+#login view
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+        #check whether the member is registered 
         user = Member.check_member(username,password)
-        #user = authenticate(request, username=username, password=password)
         if user is not None:
+            #use Django authentication login
             login(request,user)
             return redirect(myaccount)
         else:
             return render(request,'login.html', {'feedback':json.dumps("Please input correct username and password!")})   
     return render(request,'login.html')
 
+#signup view
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         tokenCode = request.POST.get('token')
         memberEmail = '#'
         if form.is_valid():
+            #check whether email has been used by existing member
             all_emails= Member.objects.all()
             for ema in all_emails:
                 if (ema.email== memberEmail):
                     return render(request,'signup.html', {'form':form, 'feedback':json.dumps("Invalid email or token!")})
 
             memberEmail = form.cleaned_data.get('email')
+            #check whether token is valid
             token_available=Token.check_token(tokenCode,memberEmail)
 
-            if token_available == False:
-                
+            if token_available == False:            
                 return render(request,'signup.html', {'form':form, 'feedback':json.dumps("Invalid email or token!")})
             else: 
                 form.save()
@@ -85,11 +88,14 @@ def signup(request):
 
     return render(request, 'signup.html', {'form': form})
 
+#logout view
 @login_required
 def logout_view(request):
+    #use Django authentication logout
     logout(request)
     return redirect(search)
 
+#password change view
 @login_required
 def password_change(request):
     if request.method == 'POST':
@@ -100,11 +106,12 @@ def password_change(request):
             messages.success(request, 'Your password was successfully updated!')
             return redirect(myaccount)
         else: 
-            messages.error(request, 'Please correct the error below.')
+            return HttpResponse("error")
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'password_change.html',{'form':form})
 
+#upload view
 @login_required
 def upload(request):
     if request.method == 'POST':
@@ -114,9 +121,12 @@ def upload(request):
         category = request.POST.get('category')
         description = request.POST.get('description')
         tag_list = tag.split(',')
+        #check upload limit 
         if len(tag_list) > TAG_LIMIT:
             return render(request,'upload.html', {'form':form, 'feedback':json.dumps("You have reached tag limit!")})               
+        #check total number of images the member maintains
         total = Image.check_number_limit(request.user)
+        #check frequency: the number of image the member uploads today
         frequency = Image.check_frequency_limit(request.user, datetime.date.today())
        
         if (form.is_valid() and total < MAX_NUMBER and frequency < MAX_FREQUENCY):
@@ -125,13 +135,15 @@ def upload(request):
             new_item.owner = request.user
             new_item.title = title 
             new_item.description = description          
-             
+            
+            #check whether the category exists  
             if not Category.objects.filter(name=category):
                 new_category = Category(name=category)
                 new_category.save()   
             new_item.category = Category.objects.get(name=category)          
-            new_item.save()      
+            new_item.save()     
 
+            #check tag list
             for tag in tag_list: 
                 if not Tag.objects.filter(name=tag):
                     new_tag = Tag(name=tag)
@@ -306,7 +318,7 @@ def search (request):
     return render(request, 'search.html', context)
     
 
-
+#myaccount view 
 @login_required
 def myaccount(request):
     try:
@@ -320,15 +332,16 @@ def myaccount(request):
     
     return render(request, 'myaccount.html', context)
 
+#delete view
 @login_required
 def delete(request,img_pk):
     try:
         images = Image.get_image(img_pk)
-        #results_image = Image.objects.filter(id=img_pk,owner=request.user)
     except:
         images = None
     if images: 
         for results_image in images: 
+            #check whether the member owns the image
             if results_image.owner == request.user: 
                 results_image.delete()
                 return redirect(myaccount)
@@ -339,10 +352,12 @@ def delete(request,img_pk):
     }   
     return render(request, 'myaccount.html',context)
 
+#invite view 
 @login_required
 def invite(request):
     if request.method == 'GET':
         email = request.GET.get('invite_email')
+        #check whehter email is valid 
         if email:
             tokenCode = Token.generate_token(email)
             Token.objects.create(email = email, tokenCode = tokenCode).save()
@@ -354,20 +369,23 @@ def invite(request):
         return HttpResponse("Error")
     return render(request, 'invite.html')
 
+#invite_done view: notification of successful invitation
 @login_required
 def invite_done(request):
     return render(request,'invite_done.html')
 
+#edit_profile view
 @login_required
 def edit_profile(request):
     if request.method == 'POST':
         form = EditProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
+            #check whether email is used by the existing member
             all_email = Member.objects.all()
             for ema in all_email:
                 if request.user.email == ema.email:
                     if(request.user != ema):
-                        return render(request,'search.html',{'feedback':json.dumps("This email has been used by someone else!")})
+                        return render(request,'edit_profile.html',{'feedback':json.dumps("This email has been used by someone else!")})
                 
             form.save()
             return redirect(myaccount)
@@ -448,6 +466,7 @@ def like_images(request):
                 return render(request,'search.html',{'feedback':json.dumps("You have already liked this photo!")})
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+#downloaad view 
 def download_images(request,img_pk):
     try: 
         images = Image.get_image(img_pk)
@@ -455,11 +474,11 @@ def download_images(request,img_pk):
         images = None
     if images: 
         for results_image in images:     
-            # results_image.download_stats=results_image.download_stats+1
-            # results_image.save()
+            #increment download stats
             Image.increment_download_stat(results_image)
             print(results_image.download_stats)
             response = HttpResponse(results_image.image, content_type='image/jpeg')
+            #set title as image's filename, if there is no title, filename will be "Untitled_image"
             if results_image.title:
                 filename = results_image.title
             else:
@@ -468,6 +487,7 @@ def download_images(request,img_pk):
             return response
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+#other photographer's account view 
 def othersaccount(request,member_pk):
     member_id_found = Member.find_member(member_pk)
     result_images = Image.retrieve_image_member(member_id_found)

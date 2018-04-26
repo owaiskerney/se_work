@@ -24,6 +24,7 @@ class SignupForm(UserCreationForm):
 class EmailValidationOnForgotPassword(PasswordResetForm):
     def clean_email(self):
         email = self.cleaned_data['email']
+        #check whether the email for password reset belongs to existing member
         if not Member.objects.filter(email__iexact=email, is_active=True).exists():
             raise ValidationError("There is no member registered with this email address, please input again.")
         return email
