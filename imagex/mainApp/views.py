@@ -40,6 +40,8 @@ MAX_FREQUENCY=100
 TAG_LIMIT = 10
 
 
+
+
 def home(request):
     return HttpResponse("This is main app")
 
@@ -150,6 +152,7 @@ def search (request):
     global LAST_SEARCH_KEYWORD
     global LAST_SEARCH_KEYWORD_TYPE
     
+    
     if request.method == 'GET':
         keyword = request.GET.get('keyword')
         category_name = request.GET.get('category')
@@ -186,7 +189,7 @@ def search (request):
         LAST_SEARCH_KEYWORD= category_name
         LAST_SEARCH_KEYWORD_TYPE= "Category"
         try:
-            #cat_id_found = Category.objects.get(name=str(category_name))
+            
             cat_id_found = Category.find_cat_id(category_name)
         except ObjectDoesNotExist:
             cat_id_found = None
@@ -194,7 +197,7 @@ def search (request):
     # Finding corresponding image with specified tag   
         if (cat_id_found!= None):
 
-            #result_images = Image.objects.filter(category=cat_id_found)
+            
             result_images = Image.retrieve_image_category(cat_id_found)
      
 
@@ -242,7 +245,7 @@ def search (request):
                     }     
                     return render(request, 'search.html', context)
                 else:
-                    print("ELSAAAAA")
+                    print("")
             helper=0
             for image in all_images:
                 
@@ -262,20 +265,14 @@ def search (request):
 
             
 
-   			    #result_images = Image.objects.filter(tag=tag_id_found)
-            
-                    
-
-
-
-
-        #return JsonResponse({'result_images': list(result_images)})
+   			   
+        
     elif( keyword== None and category_name== None and photographer_name!= ""):
         LAST_SEARCH_KEYWORD_TYPE= "Photographer"
         last_remembered=[]
         last_remembered.append(photographer_name)
         try:
-            #photographer_id_found = Member.objects.get(username=str(photographer_name))
+            
             photographer_id_found= Member.find_member(photographer_name)
         except ObjectDoesNotExist:
             photographer_id_found = None
@@ -303,62 +300,6 @@ def search (request):
     return render(request, 'search.html', context)
     
 
-#search view
-def search_category (request):
-    # Extracting keyword to be matched to tag
-    if request.method == 'GET':
-        category_name = request.GET.get('category')
-   
-    try:
-        cat_id_found = Category.objects.get(name=str(category_name))
-    except ObjectDoesNotExist:
-        cat_id_found = None
-    
-    # Finding corresponding image with specified tag   
-    if (cat_id_found!= None):
-
-        result_images = Image.objects.filter(category=cat_id_found)
-
-        #Sorting images by recency as default
-        result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
-    else:
-        result_images=[]
-
-    
-    context={
-        'result_images': result_images
-    }     
-    return render(request, 'search.html', context)
-
-def search_photographer(request):
-    global LAST_SEARCH_KEYWORD
-    if request.method == 'GET':
-        photographer_name = LAST_SEARCH_KEYWORD
-        sort_by= request.GET.get('sort_by')
-        
-    # Finding tag id of tag supplied as keyword
-    
-    try:
-        photographer_id_found = Member.objects.get(username=str(photographer_name))
-    except ObjectDoesNotExist:
-        photographer_id_found = None
-
-    # Finding corresponding image with specified tag   
-    result_images = Image.objects.filter(owner=photographer_id_found)
-
-    if(str(sort_by)== "recency"):
-        
-        result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
-    elif(str(sort_by)== "popularity"):
-        
-        result_images=sorted(result_images, key=attrgetter('popularity'),reverse=True)
-
-
-    
-    context={
-        'result_images': result_images
-    }     
-    return render(request, 'search.html', context)
 
 @login_required
 def myaccount(request):
@@ -462,19 +403,19 @@ def like_images(request):
     if request.method == 'GET':
         like_image= request.GET.get("like_image")
     liked=False
-    #img= Image.objects.filter(id=like_image)
+    
     img= Image.get_image(like_image)
     for result in img:
         if (result.owner == request.user):
             print("I own it")
+            return render(request,'search.html',{'feedback':json.dumps("You cannot like your own photo! Press the back button on your browser to go back to search results")})
+
         else:
             try:
-                #already_liked = Image.objects.filter(id=like_image,likeby=request.user)
+                
                 already_liked = Image.check_already_liked(like_image,request.user)
-                print("hahahha")
-                # for liker in already_liked:
-                #     if (liker== request.user):
-                #         liked= True
+                
+                
 
             except:
                 already_liked= ""
@@ -488,10 +429,11 @@ def like_images(request):
                 for member in mem:
                 	result.likeby.add(member)
 
-                #result.likeby.add(Member.objects.get(id=request.user)) 
+                 
                 result.save()
             else:
                 print("You have already liked this photo")
+                return render(request,'search.html',{'feedback':json.dumps("You have already liked this photo!")})
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def download_images(request,img_pk):

@@ -103,6 +103,12 @@
       <div>
 
       {% endif %}
+
+      <script>
+        var fb = {{ feedback|safe}};
+        window.alert(fb);
+        history.back();
+      </script>
       {% if result_images %}
         {% if last_remembered %}
         
