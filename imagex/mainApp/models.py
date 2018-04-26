@@ -126,7 +126,7 @@ class Image(models.Model):
 class Token(models.Model):
 	email = models.EmailField(null = True, blank = True, max_length = 30)
 	tokenCode = models.IntegerField()
-	
+
 	def check_token(token,email):
 		tokens = Token.objects.filter(tokenCode=token)            
 		token_available = False
@@ -134,7 +134,7 @@ class Token(models.Model):
 			if token.email == email:
 				token_available = True
 		return token_available
-	
+
 	def generate_token(email):
 		tokenCode = random.randint(100000,999999)
 		Token.objects.create(email = email, tokenCode = tokenCode).save()
