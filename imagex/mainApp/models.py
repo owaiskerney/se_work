@@ -88,7 +88,7 @@ class Image(models.Model):
 	def image_has_tag(image_id, tag_id):
 		return Image.objects.filter(id=image_id, tag=tag_id)
 	
-	def check_upload_limit(member_id):
+	def check_number_limit(member_id):
 		return Image.objects.filter(owner=member_id).count()
 
 	def check_frequency_limit(member_id,date):
