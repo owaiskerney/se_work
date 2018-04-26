@@ -69,7 +69,7 @@ def signup(request):
             token_available=Token.check_token(tokenCode,memberEmail)
 
             if token_available == False:
-                return HttpResponse ("Unavailable token!")
+                render(request,'signup.html', {'form':form, 'feedback':json.dumps("Invalid email or token!")})
             else: 
                 form.save()
                 Token.objects.filter(tokenCode=tokenCode,email=memberEmail).delete()

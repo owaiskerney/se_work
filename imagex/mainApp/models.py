@@ -131,11 +131,10 @@ class Token(models.Model):
 	tokenCode = models.IntegerField()
 
 	def check_token(token,email):
-		tokens = Token.objects.filter(tokenCode=token)            
+		tokens = Token.objects.filter(tokenCode=token,email=email)            
 		token_available = False
-		for token in tokens:
-			if token.email == email:
-				token_available = True
+		if tokens:
+			token_availabe = True
 		return token_available
 
 	def generate_token(email):
