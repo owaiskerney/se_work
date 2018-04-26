@@ -339,12 +339,21 @@ def invite(request):
     if request.method == 'GET':
         email = request.GET.get('invite_email')
         if email:
-            tokenCode = Token.generate_token(email)
-            Token.objects.create(email = email, tokenCode = tokenCode).save()
-            email_body = 'Hi! You have been invited to join imageX as a member! To register, go to our website and use the token ' + str(tokenCode)
-            sentEmail = EmailMessage ('Invitation from imageX', email_body, to=[email])
-            sentEmail.send()
-            return redirect(invite_done)
+            try:
+                all_emails = Token.objects.all().email
+            except:
+                all_emails = None
+            if all_emails:
+                for member_email in all_emails:
+                    if member_email == email:
+                        return HttpResponse("This email has been used by other member!")
+                    else: 
+                        tokenCode = Token.generate_token(email)
+                        Token.objects.create(email = email, tokenCode = tokenCode).save()
+                        email_body = 'Hi! You have been invited to join imageX as a member! To register, go to our website and use the token ' + str(tokenCode)
+                        sentEmail = EmailMessage ('Invitation from imageX', email_body, to=[email])
+                        sentEmail.send()
+                        return redirect(invite_done)
     else: 
         return HttpResponse("Error")
     return render(request, 'invite.html')
@@ -358,7 +367,7 @@ def edit_profile(request):
     if request.method == 'POST':
         form = EditProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
-            all_email = Member.objects.all()
+            all_email = Member.objects.all().email
             for email in all_email:
                 if form.email == email:
                     return render(request,'search.html',{'feedback':json.dumps("This email has been used by someone else!")})
