@@ -64,7 +64,6 @@ def signup(request):
         form = SignupForm(request.POST)
         tokenCode = request.POST.get('token')
         memberEmail = '#'
-        token_available = False
         if form.is_valid():
             memberEmail = form.cleaned_data.get('email')
             token_available=Token.check_token(tokenCode,memberEmail)
