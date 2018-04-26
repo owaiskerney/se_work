@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Upload Image</title>
+<!-- For-Mobile-Apps -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+</script>
+    <!--//tags -->
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="css/prettyPhoto.css" rel="stylesheet" type="text/css" />
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <!-- //for bootstrap working -->
+    <link href="http://fonts.googleapis.com/css?family=Raleway:100,100i,200,300,300i,400,400i,500,500i,600,600i,700,800" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet">
+</head>
+<body>
+<!-- Header -->
+ <div class="top_header" id="home">
+      <!-- Fixed navbar -->
+      <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="nav_top_fx_w3ls_agileinfo">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					    aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <div class="logo-w3layouts-agileits">
+              <h1> <a class="navbar-brand" href="index.html"><i class="fa fa-clone" aria-hidden="true"></i> ImageX <span class="desc">-----------</span></a></h1>
+            </div>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <div class="nav_right_top">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a class="request" href="My Account1.html">My Account</a></li>
+                
+              </ul>
+              <ul class="nav navbar-nav">
+                <li><a href="Home1.html">Home</a></li>
+                <li></li>
+                <li class="active"></li>
+                <li><a href="upload.html">Upload</a></li>
+                <li class="Invite">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Invite <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="Invite.html">photographer</a></li>                
+                    
+                    
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!--/.nav-collapse -->
+        </div>
+      </nav>
+  </div>
+
+	
+	
+	
+<div class="banner_bottom">	
+	
+<!-- About -->
+<div class="about" id="about">
+	<div class="container">
+		<br><br><h3>Upload an image</h3>
+		<post class="text-center text-uppercase"><strong>Please only upload an image you own the rights with format of JPEG. </strong></post>
+	</div>
+</div>
+<!-- //About -->
+
+<!-- Upload button  -->
+<center><form id='mainForm' action="xxx.action" method="post" name="mainForm">
+<!--     <input type="button" value="Select an image" onclick="document.mainForm.image.click()"> 
+    <a id="filename">Select an image</a> -->
+    <input type="file" name="image" id="image" accept="image/jpeg*"    onChange="changeText(this)">
+</form></center><br><br>
+
+
+<!-- title, tag,category,description  -->
+<div class="container">
+	<form>
+	  <div class="form-group">
+	    <label for="exampleFormControlInput1">Title</label>
+	    <input type="email" class="form-control" id="exampleFormControlInput1">
+	  </div>
+	  <div class="form-group">
+	    <label for="exampleFormControlSelect1">Category</label>
+	    <select class="form-control" id="exampleFormControlSelect1">
+	      <option>Abstract</option>
+	      <option>Aerial</option>
+	      <option>Animals</option>
+	      <option>Architecture</option>
+	      <option>Black and White</option>
+	      <option>family</option>
+	      <option>Fashion</option>
+	      <option>Fine Art</option>
+	      <option>Food</option>
+	      <option>Journalism</option>
+	      <option>Landscape</option>
+	      <option>Macro</option>
+	      <option>Nature</option>
+	      <option>Night</option>
+	      <option>People</option>
+	      <option>Performing Arts</option>
+	      <option>Sport</option>
+	      <option>Still Life</option>
+	      <option>Street</option>
+	      <option>Travel</option>
+	    </select>
+	  </div>
+	  <div class="form-group">
+	    <label for="exampleFormControlInput1">Tag</label>
+	    <input type="email" class="form-control" id="exampleFormControlInput1">
+	  </div>
+	  <div class="form-group">
+	    <label for="exampleFormControlTextarea1">Description</label>
+	    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+	  </div>
+	</form>
+<!--  	 <div class="text-center">
+		<button type="button" align:center class="btn btn-outline-secondary">Upload</button>
+</div> -->
+<div class="text-center">
+<div class="container">
+  <!-- Trigger the modal with a button -->
+  <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#myModal">Upload</button>
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-dialog-center">
+      <!-- Modal content-->
+      <div class="modal-content">
+<!--         <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
+        </div> -->
+	        <div class="modal-body"><br>The image uploaded successfully!</div>
+	        <div class="modal-footer">
+	          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        </div>
+      </div>
+    </div>
+  </div> 
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
