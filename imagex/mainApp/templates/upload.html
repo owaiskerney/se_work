@@ -1,83 +1,83 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Upload Image</title>
-<!-- For-Mobile-Apps -->
-{% load staticfiles %}
+	<title>Upload Image</title>
+	<!-- For-Mobile-Apps -->
+	{% load staticfiles %}
 </head>
 <body>
-<script>
-  var fb = {{ feedback|safe}};
-  window.alert(fb);
-</script>
+	<script>
+		var fb = {{ feedback|safe}};
+		window.alert(fb);
+	</script>
 
-{% if user.is_authenticated %}
-  {% include 'base_login.html' %}
-{% else %}
-  {% include 'base.html' %}  
-{% endif %}
-<div class="banner_bottom">		
-<div class="about" id="about">
-	<div class="container">
-		<h3>Upload an image</h3>
-		<post class="text-center text-uppercase"><strong>Please only upload an image you own the rights with format of JPEG. </strong></post>
-	</div>
-</div>
+	{% if user.is_authenticated %}
+	{% include 'base_login.html' %}
+	{% else %}
+	{% include 'base.html' %}  
+	{% endif %}
+	<div class="banner_bottom">		
+		<div class="about" id="about">
+			<div class="container">
+				<h3>Upload an image</h3>
+				<post class="text-center text-uppercase"><strong>Please only upload an image you own the rights with format of JPEG. </strong></post>
+			</div>
+		</div>
 
-{% block content %}
+		{% block content %}
 
-<div class="text-center">
-<div class ='container'>
-	<form class="form-group" method="post" enctype="multipart/form-data">
-	    {% csrf_token %}
-	  <div class="form-group">
-	    <br><br><label for="exampleFormControlInput1">Title</label>
-	    <br>
-      <input type="text" class="form-control" name = "title" id="title">
-	  </div>
-	  <div class="form-group">
-	    <label for="exampleFormControlInput1">Tag</label>
-	    <br>
-	    <input type="text" class="form-control" name = "tag" id="tag">
-	  </div>
-	  <div class="form-group">
-	    <label for="exampleFormControlSelect1">Category</label>
-	    <br> <select type="text" class="form-control" name = "category" id="category">
-	      <option selected></option>
-	      <option>Abstract</option>
-	      <option>Aerial</option>
-	      <option>Animals</option>
-	      <option>Architecture</option>
-	      <option>Black and White</option>
-	      <option>family</option>
-	      <option>Fashion</option>
-	      <option>Fine Art</option>
-	      <option>Food</option>
-	      <option>Journalism</option>
-	      <option>Landscape</option>
-	      <option>Macro</option>
-	      <option>Nature</option>
-	      <option>Night</option>
-	      <option>People</option>
-	      <option>Performing Arts</option>
-	      <option>Sport</option>
-	      <option>Still Life</option>
-	      <option>Street</option>
-	      <option>Travel</option>
-	    </select>
-	 </div>
-	  <div class="form-group">
-	    <label for="exampleFormControlTextarea1">Description</label>
-	    <br>
-      <textarea class="form-control" name="description" id="description" rows="3"></textarea>
-	  </div>
-	  	<br>
-	  	<center>{{ form.image }}</center>
-	  	<br><br><br><br>
-	  	<button type="submit" class="btn btn-outline-secondary" data-toggle="modal" data-target="#myModal">Upload</button>
-	</form>
- </div>
- </div>
+		<div class="text-center">
+			<div class ='container'>
+				<form class="form-group" method="post" enctype="multipart/form-data">
+					{% csrf_token %}
+					<div class="form-group">
+						<br><br><label for="exampleFormControlInput1">Title</label>
+						<br>
+						<input type="text" class="form-control" name = "title" id="title">
+					</div>
+					<div class="form-group">
+						<label for="exampleFormControlInput1">Tag</label>
+						<br>
+						<input type="text" class="form-control" name = "tag" id="tag">
+					</div>
+					<div class="form-group">
+						<label for="exampleFormControlSelect1">Category</label>
+						<br> <select type="text" class="form-control" name = "category" id="category">
+							<option selected></option>
+							<option>Abstract</option>
+							<option>Aerial</option>
+							<option>Animals</option>
+							<option>Architecture</option>
+							<option>Black and White</option>
+							<option>family</option>
+							<option>Fashion</option>
+							<option>Fine Art</option>
+							<option>Food</option>
+							<option>Journalism</option>
+							<option>Landscape</option>
+							<option>Macro</option>
+							<option>Nature</option>
+							<option>Night</option>
+							<option>People</option>
+							<option>Performing Arts</option>
+							<option>Sport</option>
+							<option>Still Life</option>
+							<option>Street</option>
+							<option>Travel</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="exampleFormControlTextarea1">Description</label>
+						<br>
+						<textarea class="form-control" name="description" id="description" rows="3"></textarea>
+					</div>
+					<br>
+					<center>{{ form.image }}</center>
+					<br><br><br><br>
+					<button type="submit" class="btn btn-outline-secondary" data-toggle="modal" data-target="#myModal">Upload</button>
+				</form>
+			</div>
+		</div>
 
-{% endblock %}
+		{% endblock %}
 

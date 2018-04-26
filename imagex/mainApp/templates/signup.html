@@ -1,97 +1,97 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Signup</title>
-<!-- For-Mobile-Apps -->
-{% load staticfiles %}
+    <title>Signup</title>
+    <!-- For-Mobile-Apps -->
+    {% load staticfiles %}
 </head>
 <body>
-<script>
-  var fb = {{ feedback|safe}};
-  window.alert(fb);
-</script>
-<div class="banner_inner_con"></div>
-    <div class="banner_bottom">
-        <div class="container">
-            <div class="tittle-w3ls_head">
-                <h3 class="tittle-w3ls three">Sign up <span>your Account &nbsp &nbsp&nbsp&nbsp  </span></h3>
-            </div>
-{% if user.is_authenticated %}
-  {% include 'base_login.html' %}
-{% else %}
-  {% include 'base.html' %}  
-{% endif %}
+    <script>
+      var fb = {{ feedback|safe}};
+      window.alert(fb);
+  </script>
+  <div class="banner_inner_con"></div>
+  <div class="banner_bottom">
+    <div class="container">
+        <div class="tittle-w3ls_head">
+            <h3 class="tittle-w3ls three">Sign up <span>your Account &nbsp &nbsp&nbsp&nbsp  </span></h3>
+        </div>
+        {% if user.is_authenticated %}
+        {% include 'base_login.html' %}
+        {% else %}
+        {% include 'base.html' %}  
+        {% endif %}
 
 
-<br><br>
+        <br><br>
 
-<form class="form" action="" method="post">
+        <form class="form" action="" method="post">
 
-    {% csrf_token %}
-    {{ form.non_field_errors }}
-<center>
-    <table>
-    <tr>
-        <td> <div class="form-group"><label for="{{ form.username.id_for_label }}">Username</label></div></td>
-        <td>{{ form.username }}</td>
-    </tr>
-    <tr>
-        <td colspan="2">{{ form.username.errors | striptags }}</td>
-    </tr>
-    <tr>
-        <td colspan="2">{{ form.username.help_text|safe}}</td>
-    </tr>
-    
-    <tr><td colspan="2"><div><br></tr>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <center>
+                <table>
+                    <tr>
+                        <td> <div class="form-group"><label for="{{ form.username.id_for_label }}">Username</label></div></td>
+                        <td>{{ form.username }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">{{ form.username.errors | striptags }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">{{ form.username.help_text|safe}}</td>
+                    </tr>
+                    
+                    <tr><td colspan="2"><div><br></tr>
 
-    <tr>
-        <td> <div class="form-group"><label for="{{ form.email.id_for_label }}">Email</label></div></td>
-        <td> {{ form.email }} </td>
-    </tr>
-    <tr>
-        <td colspan="2">{{ form.email.errors| striptags }}</td>
-    </tr>
-    <tr>
-        <td colspan="2"> {{ form.email.help_text|safe}} </td>
-    </tr>
+                        <tr>
+                            <td> <div class="form-group"><label for="{{ form.email.id_for_label }}">Email</label></div></td>
+                            <td> {{ form.email }} </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">{{ form.email.errors| striptags }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"> {{ form.email.help_text|safe}} </td>
+                        </tr>
 
-    <tr><td colspan="2"><div><br></tr>
+                        <tr><td colspan="2"><div><br></tr>
 
-    <tr>
-        <td><div class="form-group"> <label for="{{ form.password1.id_for_label }}">Password</label></div></td>
-        <td> {{ form.password1 }} </td>
-    </tr>
-    <tr>
-        <td colspan="2"> {{ form.password1.errors| striptags }} </td>
-    </tr>
-    <tr>
-        <td colspan="2"> {{ form.password1.help_text|safe}} </td>
-    </tr>
-    <tr><td colspan="2"><div><br></tr>
+                            <tr>
+                                <td><div class="form-group"> <label for="{{ form.password1.id_for_label }}">Password</label></div></td>
+                                <td> {{ form.password1 }} </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"> {{ form.password1.errors| striptags }} </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"> {{ form.password1.help_text|safe}} </td>
+                            </tr>
+                            <tr><td colspan="2"><div><br></tr>
 
-    
-    <tr>
-        <td><div class="form-group"> <label for="{{ form.new_password2.id_for_label }}">Password Confirmation</label></div></td>
-        <td>{{ form.password2 }}</td>
-    </tr>
-    <tr>
-        <td colspan="2">{{ form.password2.errors| striptags }}</td>
-    </tr>
-    <tr>
-        <td colspan="2">{{ form.password2.help_text|safe}}</td>
-    </tr>
-    <tr><td colspan="2"><div><br></tr>
+                                
+                                <tr>
+                                    <td><div class="form-group"> <label for="{{ form.new_password2.id_for_label }}">Password Confirmation</label></div></td>
+                                    <td>{{ form.password2 }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">{{ form.password2.errors| striptags }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">{{ form.password2.help_text|safe}}</td>
+                                </tr>
+                                <tr><td colspan="2"><div><br></tr>
 
-    <tr>
-        <td><label for="token">Token</label></td>
-        <td><input type="text" name = "token" id="token"></td>
-	</tr>
+                                    <tr>
+                                        <td><label for="token">Token</label></td>
+                                        <td><input type="text" name = "token" id="token"></td>
+                                    </tr>
 
 <!--     {% for field in form %}
         <div class="fieldWrapper">
             {{ field.help_text|safe }}
         </div>
-    {% endfor %} -->
+        {% endfor %} -->
     </table>
 </center>
 <br><br><br>

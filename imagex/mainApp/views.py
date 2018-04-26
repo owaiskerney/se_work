@@ -445,7 +445,7 @@ def like_images(request):
     for result in img:
     	#Checking if member owns the image being liked
         if (result.owner == request.user):
-            return render(request,'search.html',{'feedback':json.dumps("You cannot like your own photo! Press the back button on your browser to go back to search results")})
+            return render(request,'search.html',{'feedback':json.dumps("You cannot like your own photo!")})
 
         else:
             try:
