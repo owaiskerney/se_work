@@ -230,7 +230,7 @@ def search (request):
     elif (keyword!= None and category_name== None and photographers==None):
         LAST_SEARCH_KEYWORD_TYPE= "Tag"
         flag_keyword=[1,2,3]
-        keyword_list = keyword.split(' ')
+        keyword_list = keyword.split(',')
         last_remembered=[]
         last_remembered.append(str(keyword))
         #if search is for single keyword
