@@ -103,6 +103,10 @@ class Image(models.Model):
 
 	def check_already_liked(image_id, user_id):
 		return Image.objects.filter(id=image_id,likeby=user_id)
+	
+	def increment_download_stat(Image):
+		Image.download_stats = Image.download_stats+1
+		Image.save()
 
 
 	
