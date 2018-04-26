@@ -25,7 +25,6 @@ from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.contrib import messages
-import random
 from django.core.mail import EmailMessage
 from django.contrib.auth.views import PasswordResetView
 from operator import attrgetter
@@ -397,7 +396,7 @@ def invite(request):
     if request.method == 'GET':
         email = request.GET.get('invite_email')
         if email:
-            tokenCode = random.randint(100000,999999)
+            tokenCode = generate_token(email)
             Token.objects.create(email = email, tokenCode = tokenCode).save()
             email_body = 'Your invitation token is ' + str(tokenCode)
             sentEmail = EmailMessage ('Invitation from imageX', email_body, to=[email])
