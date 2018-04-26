@@ -501,8 +501,9 @@ def download_images(request,img_pk):
         images = None
     if images: 
         for results_image in images:     
-            results_image.download_stats=results_image.download_stats+1
-            results_image.save()
+            # results_image.download_stats=results_image.download_stats+1
+            # results_image.save()
+            Image.increment_download_stat(results_image)
             print(results_image.download_stats)
             response = HttpResponse(results_image.image, content_type='image/jpeg')
             if results_image.title:
@@ -512,4 +513,3 @@ def download_images(request,img_pk):
             response['Content-Disposition'] = 'attachment; filename=%s.jpg' % filename
             return response
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
