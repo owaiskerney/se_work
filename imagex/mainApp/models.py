@@ -60,6 +60,10 @@ class Member(AbstractUser):
 
 	def find_member(keyword):
 		return Member.objects.get(username=str(keyword))
+	
+	def check_member(username,password):
+		user = authenticate(username=username,password=password)
+		return user
 
 	# def __str__(self):
 	#  	return self.user.username
@@ -118,6 +122,14 @@ class Image(models.Model):
 class Token(models.Model):
 	email = models.EmailField(null = True, blank = True, max_length = 30)
 	tokenCode = models.IntegerField()
+	
+	def check_token(token,email):
+		tokens = Token.objects.filter(tokenCode=token)            
+		token_available = False
+		for token in tokens:
+			if token.email == email:
+				token_available = True
+		return token_available
 
 class Gallery(models.Model):
 	name=models.CharField(max_length=20)
