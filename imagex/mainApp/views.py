@@ -183,6 +183,7 @@ def search (request):
         
     # Finding tag id of tag supplied as keyword
     result_images=[]
+    flag_keyword=[]
     if(category_name != None and keyword== None and photographers== None):
         LAST_SEARCH_KEYWORD= category_name
         LAST_SEARCH_KEYWORD_TYPE= "Category"
@@ -210,6 +211,7 @@ def search (request):
         keyword_list = keyword.split(' ')
 
         if(len(keyword_list)==1):
+            flag_keyword=[1,2,3]
 
             try:
                 tag_id_found = Tag.objects.get(name=str(keyword))
@@ -222,7 +224,7 @@ def search (request):
                 result_images = Image.objects.filter(tag=tag_id_found)
 
         else:
-            
+            flag_keyword=[1,2,3]
             all_images= Image.objects.all()
             result_images=[]
             for key in keyword_list:
@@ -277,21 +279,10 @@ def search (request):
             photographer_id_found = None
 
 
-        print(".............................................................")
-        print(".............................................................")
-        print(".............................................................")
-        print(photographer_name)
-        print(".............................................................")
-        print(".............................................................")
-        print(".............................................................")
+       
     # Finding corresponding image with specified tag   
         result_images = Image.retrieve_image_member(photographer_id_found)
 
-        
-
-
-    
-          
 
 
     if(sort_by== None or str(sort_by)== "recency"):
@@ -303,7 +294,8 @@ def search (request):
         result_images=sorted(result_images, key=attrgetter('popularity'),reverse=True)
     
     context={
-        'result_images': result_images
+        'result_images': result_images,
+        'flag_keyword': flag_keyword
     }     
     return render(request, 'search.html', context)
     
@@ -355,13 +347,7 @@ def search_photographer(request):
         
         result_images=sorted(result_images, key=attrgetter('uploadtime'),reverse=True)
     elif(str(sort_by)== "popularity"):
-        print(".............................................................")
-        print(".............................................................")
-        print(".............................................................")
-        print(photographer_name)
-        print(".............................................................")
-        print(".............................................................")
-        print(".............................................................")
+        
         result_images=sorted(result_images, key=attrgetter('popularity'),reverse=True)
 
 
@@ -488,7 +474,7 @@ def like_images(request):
                 already_liked= ""
             
             if(len(already_liked) == 0):
-                print("HAHAHAHAHHAHAAH")
+                
                 result.like_stats= result.like_stats+1
                
                 mem= Member.objects.filter(id=request.user.id)
