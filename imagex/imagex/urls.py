@@ -9,7 +9,7 @@ from django.contrib.auth import views as auth_views
 
 app_name = 'mainApp'
 urlpatterns = [
-    url(r'^$', views.home, name='home'),
+    url(r'^$', views.browse_by_popularity_homepage, name='homepage'),
     url(r'^homepage/', views.browse_by_popularity_homepage, name='homepage'),
     url(r'^browse_by_popularity_homepage/', views.browse_by_popularity_homepage, name='browse_by_popularity_homepage'),
     url(r'^admin/', admin.site.urls),
