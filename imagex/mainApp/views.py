@@ -64,6 +64,7 @@ def signup(request):
         form = SignupForm(request.POST)
         tokenCode = request.POST.get('token')
         memberEmail = '#'
+        token_available = False
         if form.is_valid():
             memberEmail = form.cleaned_data.get('email')
             token_available=Token.check_token(tokenCode,memberEmail)
@@ -357,8 +358,13 @@ def edit_profile(request):
     if request.method == 'POST':
         form = EditProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
-            form.save()
-            return redirect(myaccount)
+            all_email = Member.objects.all()
+            for email in all_email:
+                if form.email == email:
+                    return render(request,'search.html',{'feedback':json.dumps("This email has been used by someone else!")})
+                else:
+                    form.save()
+                    return redirect(myaccount)
     else: 
         form = EditProfileForm(instance=request.user)
     return render(request,'edit_profile.html',{'form':form})
