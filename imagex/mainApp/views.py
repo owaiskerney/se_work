@@ -340,7 +340,7 @@ def invite(request):
         if email:
             tokenCode = Token.generate_token(email)
             Token.objects.create(email = email, tokenCode = tokenCode).save()
-            email_body = 'Your invitation token is ' + str(tokenCode)
+            email_body = 'Hi! You have been invited to join imageX as a member! To register, go to our website and use the token ' + str(tokenCode)
             sentEmail = EmailMessage ('Invitation from imageX', email_body, to=[email])
             sentEmail.send()
             return redirect(invite_done)
