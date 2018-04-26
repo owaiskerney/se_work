@@ -10,4 +10,6 @@ Made using Python on Django
 Python - v3.5.2
 Django - v2.0.3
 
+Note: 
+Separate tag using ','
 
