@@ -154,11 +154,11 @@ def upload(request):
 
 #search view
 def search (request):
-    # Extracting keyword to be matched to tag
+    #importing global variables inside function
     global LAST_SEARCH_KEYWORD
     global LAST_SEARCH_KEYWORD_TYPE
     
-    
+    #Extracting variables from GET request
     if request.method == 'GET':
         keyword = request.GET.get('keyword')
         category_name = request.GET.get('category')
@@ -167,6 +167,7 @@ def search (request):
 
 
         photographers=request.GET.get('photographers')
+        #Determining current and last search type : for example: search by keyword, category or photographer name
         if (str(photographers) == "True"):
             photographer_name=LAST_SEARCH_KEYWORD
         else:
@@ -187,20 +188,22 @@ def search (request):
             LAST_SEARCH_KEYWORD=str(keyword)
 
         
-    # Finding tag id of tag supplied as keyword
+    
     result_images=[]
     flag_keyword=[]
     last_remembered=[]
+    #If search is search by category
     if(category_name != None and keyword== None and photographers== None):
         LAST_SEARCH_KEYWORD= category_name
         LAST_SEARCH_KEYWORD_TYPE= "Category"
+        #Finding specific category id for tag supplied
         try:
             
             cat_id_found = Category.find_cat_id(category_name)
         except ObjectDoesNotExist:
             cat_id_found = None
 
-    # Finding corresponding image with specified tag   
+    #Loading images for supplied category 
         if (cat_id_found!= None):
 
             
@@ -211,14 +214,14 @@ def search (request):
   
         
 
-
+    #if search is search by keyword/keyphrase
     elif (keyword!= None and category_name== None and photographers==None):
         LAST_SEARCH_KEYWORD_TYPE= "Tag"
         flag_keyword=[1,2,3]
         keyword_list = keyword.split(' ')
         last_remembered=[]
         last_remembered.append(str(keyword))
-
+        #if search is for single keyword
         if(len(keyword_list)==1):
             flag_keyword=[1,2,3]
 
@@ -231,6 +234,8 @@ def search (request):
     # Finding corresponding image with specified tag
             if(tag_id_found != None):
                 result_images = Image.objects.filter(tag=tag_id_found)
+
+        #if search is for keyphrase
 
         else:
             
@@ -272,7 +277,7 @@ def search (request):
             
 
    			   
-        
+    #if search is by photographer
     elif( keyword== None and category_name== None and photographer_name!= ""):
         LAST_SEARCH_KEYWORD_TYPE= "Photographer"
         last_remembered=[]
@@ -285,11 +290,11 @@ def search (request):
 
 
        
-    # Finding corresponding image with specified tag   
+    	#loading relevant images for the specified member   
         result_images = Image.retrieve_image_member(photographer_id_found)
 
 
-
+    #Handling sort request by recency or popularity: default being recency as well
     if(sort_by== None or str(sort_by)== "recency"):
            
         result_images=sorted(result_images, key=attrgetter('uploadtime'))
@@ -375,16 +380,16 @@ def edit_profile(request):
         form = EditProfileForm(instance=request.user)
     return render(request,'edit_profile.html',{'form':form})
 
-
+#browse_by_popularity view
 def browse_by_popularity(request):
     if request.method == 'GET':
         browse_by_popularity = request.GET.get('browse_popularity')
 
-    # Finding tag id of tag supplied as keyword
+    #preparing to load images
     result_images=[]
     if(browse_by_popularity == "True"):
 
-    # Finding corresponding image with specified tag   
+    # Finding all images and sorting them
         result_images = Image.objects.all()
         result_images=sorted(result_images, key=attrgetter('popularity'))
     
@@ -393,15 +398,16 @@ def browse_by_popularity(request):
     }     
     return render(request, 'search.html', context)
 
+#browse_by_popularity_homepage view for rendering images on homepage
 def browse_by_popularity_homepage(request):
     if request.method == 'GET':
         browse_by_popularity = request.GET.get('browse_popularity')
 
-    # Finding tag id of tag supplied as keyword
+    #preparing to load images
     result_images=[]
     if(browse_by_popularity == None):
 
-    # Finding corresponding image with specified tag   
+    #loading all images and sorting them   
         result_images = Image.objects.all()
         result_images=sorted(result_images, key=attrgetter('popularity'),reverse=True)
     
@@ -410,6 +416,7 @@ def browse_by_popularity_homepage(request):
     }     
     return render(request, 'homepage.html', context)
 
+#like_images view for handling like event
 @login_required
 def like_images(request):
     if request.method == 'GET':
@@ -418,8 +425,8 @@ def like_images(request):
     
     img= Image.get_image(like_image)
     for result in img:
+    	#Checking if member owns the image being liked
         if (result.owner == request.user):
-            print("I own it")
             return render(request,'search.html',{'feedback':json.dumps("You cannot like your own photo! Press the back button on your browser to go back to search results")})
 
         else:
@@ -443,8 +450,9 @@ def like_images(request):
 
                  
                 result.save()
+            #If member has already liked the concerned photo
             else:
-                print("You have already liked this photo")
+                
                 return render(request,'search.html',{'feedback':json.dumps("You have already liked this photo!")})
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
