@@ -111,7 +111,7 @@ def upload(request):
         tag_list = tag.split(',')
         if len(tag_list) > TAG_LIMIT:
             return render(request,'upload.html', {'form':form, 'feedback':json.dumps("You have reached tag limit!")})               
-        total = Image.check_upload_limit(request.user)
+        total = Image.check_number_limit(request.user)
         frequency = Image.check_frequency_limit(request.user, datetime.date.today())
        
         if (form.is_valid() and total < MAX_NUMBER and frequency < MAX_FREQUENCY):
