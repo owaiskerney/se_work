@@ -3,6 +3,7 @@ from .validators import validate_file_extension
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 import random
+from django.contrib.auth import authenticate
 
 #class User(models.Model):
 #	def __str__(self):
