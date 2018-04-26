@@ -65,6 +65,9 @@ class Member(AbstractUser):
 		user = authenticate(username=username,password=password)
 		return user
 
+	def get_profile(member_id):
+		return Member.objects.filter(id=member_id)
+
 	# def __str__(self):
 	#  	return self.user.username
 
