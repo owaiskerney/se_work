@@ -69,11 +69,12 @@ window.onload = function(){
 <div class="inner_sec_info_wthree_agile">
       <!--/projects-->
       {% if result_images %}
-    
+      <p><strong>Here are our most popular images!</p>
       {% for img in result_images %}
       <ul class="portfolio-area">
             <li class="portfolio-item2" data-id="id-0" data-type="cat-item-4">
               <div>
+              
                 <span class="image-block block2 img-hover">
                 <a class="image-zoom" href="{{img.image.url}}" rel="prettyPhoto[gallery]">
                     <img src="{{img.image.url}}" class="img-responsive" alt="">
@@ -88,8 +89,15 @@ window.onload = function(){
            {% if img.owner.avatar %}
             <div class="owner_avatar">
                       <a href="{% url 'othersaccount' member_pk=img.owner %}"><img src="{{ img.owner.avatar.url }}" alt="" style="width:50px;height:50px;" class="img-circle"></a>
-            </div>  
+            
+          </div>
+              {% else %}
+            <div class="owner_avatar">
+                      <a href="{% url 'othersaccount' member_pk=img.owner %}">{{img.owner.username}}</a>
+            </div> 
+
             {% endif %}
+          
             <div class="like_stats">
                 <form id='like' action="/like_images" method = 'GET'> 
                   <button type="submit" class="btn btn-default" id="like_image" name="like_image" value="{{img.id}}" >&#10084;{{img.like_stats}} </button>
@@ -103,6 +111,7 @@ window.onload = function(){
             {{img.download_stats}}
 
             </div>
+
 
 
             </li>

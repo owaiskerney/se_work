@@ -65,11 +65,17 @@ def signup(request):
         tokenCode = request.POST.get('token')
         memberEmail = '#'
         if form.is_valid():
+            all_emails= Member.objects.all()
+            for ema in all_emails:
+                if (ema.email== memberEmail):
+                    return render(request,'signup.html', {'form':form, 'feedback':json.dumps("Invalid email or token!")})
+
             memberEmail = form.cleaned_data.get('email')
             token_available=Token.check_token(tokenCode,memberEmail)
 
             if token_available == False:
-                render(request,'signup.html', {'form':form, 'feedback':json.dumps("Invalid email or token!")})
+                
+                return render(request,'signup.html', {'form':form, 'feedback':json.dumps("Invalid email or token!")})
             else: 
                 form.save()
                 Token.objects.filter(tokenCode=tokenCode,email=memberEmail).delete()
@@ -357,13 +363,14 @@ def edit_profile(request):
     if request.method == 'POST':
         form = EditProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
-            all_email = Member.objects.all().email
-            for email in all_email:
-                if form.email == email:
-                    return render(request,'search.html',{'feedback':json.dumps("This email has been used by someone else!")})
-                else:
-                    form.save()
-                    return redirect(myaccount)
+            all_email = Member.objects.all()
+            for ema in all_email:
+                if request.user.email == ema.email:
+                    if(request.user != ema):
+                        return render(request,'search.html',{'feedback':json.dumps("This email has been used by someone else!")})
+                
+            form.save()
+            return redirect(myaccount)
     else: 
         form = EditProfileForm(instance=request.user)
     return render(request,'edit_profile.html',{'form':form})
