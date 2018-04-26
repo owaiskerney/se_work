@@ -563,7 +563,7 @@ def othersaccount(request,member_pk):
     member_id_found = Member.find_member(member_pk)
     result_images = Image.retrieve_image_member(member_id_found)
     context={
-        'result_images': result_images
+        'result_images': result_images,'member_id':member_id_found
     }     
     return render(request, 'othersaccount.html', context)
 
