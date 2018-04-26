@@ -275,6 +275,8 @@ def search (request):
         #return JsonResponse({'result_images': list(result_images)})
     elif( keyword== None and category_name== None and photographer_name!= ""):
         LAST_SEARCH_KEYWORD_TYPE= "Photographer"
+        last_remembered=[]
+        last_remembered.append(photographer_name)
         try:
             #photographer_id_found = Member.objects.get(username=str(photographer_name))
             photographer_id_found= Member.find_member(photographer_name)
