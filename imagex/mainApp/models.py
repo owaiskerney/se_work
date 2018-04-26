@@ -120,7 +120,8 @@ class Token(models.Model):
 	email = models.EmailField(null = True, blank = True, max_length = 30)
 	tokenCode = models.IntegerField()
 
-	
+
+	#Checks if the token and the potential member's email are matched
 	def check_token(token,email):
 		tokens = Token.objects.filter(tokenCode=token,email=email)            
 		token_available = False
@@ -128,6 +129,7 @@ class Token(models.Model):
 			token_availabe = True
 		return token_available
 
+	#Generates 6-digit token for invitation
 	def generate_token(email):
 		tokenCode = random.randint(100000,999999)
 		Token.objects.create(email = email, tokenCode = tokenCode).save()
