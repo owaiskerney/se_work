@@ -184,6 +184,7 @@ def search (request):
     # Finding tag id of tag supplied as keyword
     result_images=[]
     flag_keyword=[]
+    last_remembered=[]
     if(category_name != None and keyword== None and photographers== None):
         LAST_SEARCH_KEYWORD= category_name
         LAST_SEARCH_KEYWORD_TYPE= "Category"
@@ -207,8 +208,10 @@ def search (request):
 
     elif (keyword!= None and category_name== None and photographers==None):
         LAST_SEARCH_KEYWORD_TYPE= "Tag"
-
+        flag_keyword=[1,2,3]
         keyword_list = keyword.split(' ')
+        last_remembered=[]
+        last_remembered.append(str(keyword))
 
         if(len(keyword_list)==1):
             flag_keyword=[1,2,3]
@@ -224,7 +227,7 @@ def search (request):
                 result_images = Image.objects.filter(tag=tag_id_found)
 
         else:
-            flag_keyword=[1,2,3]
+            
             all_images= Image.objects.all()
             result_images=[]
             for key in keyword_list:
@@ -295,7 +298,8 @@ def search (request):
     
     context={
         'result_images': result_images,
-        'flag_keyword': flag_keyword
+        'flag_keyword': flag_keyword,
+        'last_remembered': last_remembered
     }     
     return render(request, 'search.html', context)
     
