@@ -2,7 +2,7 @@ from django.db import models
 from .validators import validate_file_extension
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
-
+import random
 
 #class User(models.Model):
 #	def __str__(self):
@@ -134,6 +134,11 @@ class Token(models.Model):
 			if token.email == email:
 				token_available = True
 		return token_available
+	
+	def generate_token(email):
+		tokenCode = random.randint(100000,999999)
+		Token.objects.create(email = email, tokenCode = tokenCode).save()
+		return tokenCode
 
 class Gallery(models.Model):
 	name=models.CharField(max_length=20)
