@@ -49,7 +49,8 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
+        user = Member.check_member(username,password)
+        #user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request,user)
             return redirect(myaccount)
@@ -64,11 +65,7 @@ def signup(request):
         memberEmail = '#'
         if form.is_valid():
             memberEmail = form.cleaned_data.get('email')
-            tokens = Token.objects.filter(tokenCode=tokenCode)            
-            token_available = False
-            for token in tokens:
-                if token.email == memberEmail:
-                    token_available = True
+            token_available=Token.check_token(tokenCode,memberEmail)
 
             if token_available == False:
                 return HttpResponse ("Unavailable token!")
@@ -379,14 +376,17 @@ def myaccount(request):
 @login_required
 def delete(request,img_pk):
     try:
-        results_image = Image.objects.filter(id=img_pk,owner=request.user)
+        images = Image.get_image(img_pk)
+        #results_image = Image.objects.filter(id=img_pk,owner=request.user)
     except:
-        results_image = None
-    if results_image: 
-        results_image.delete()
-        return redirect(myaccount)
-    else:
-        return HttpResponse("You are not allowed to delete it!")
+        images = None
+    if images: 
+        for results_image in images: 
+            if results_image.owner == request.user: 
+                results_image.delete()
+                return redirect(myaccount)
+            else:
+                return HttpResponse("You are not allowed to delete it!")
     context={
       'results_image': results_image
     }   
@@ -496,23 +496,20 @@ def like_images(request):
 
 def download_images(request,img_pk):
     try: 
-        results_image = Image.objects.get(id=img_pk)
+        images = Image.get_image(img_pk)
     except:
-        results_image = None    
-    if results_image:
-        results_image.download_stats=results_image.download_stats+1
-        results_image.save()
-        print(results_image.download_stats)
-        response = HttpResponse(results_image.image, content_type='image/jpeg')
-        response['Content-Disposition'] = 'attachment; filename=%s.jpg' % results_image.title
-        return response
+        images = None
+    if images: 
+        for results_image in images:     
+            results_image.download_stats=results_image.download_stats+1
+            results_image.save()
+            print(results_image.download_stats)
+            response = HttpResponse(results_image.image, content_type='image/jpeg')
+            if results_image.title:
+                filename = results_image.title
+            else:
+                filename = "Untitled_image"
+            response['Content-Disposition'] = 'attachment; filename=%s.jpg' % filename
+            return response
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-def othersaccount(request,member_pk):
-    member_id_found = Member.find_member(member_pk)
-    result_images = Image.retrieve_image_member(member_id_found)
-    context={
-        'result_images': result_images,'member_id':member_id_found
-    }     
-    return render(request, 'othersaccount.html', context)
 
