@@ -22,12 +22,12 @@
       <div class="carousel-inner" >
         <div class="item active">
           <div class="person">   
-            {% if member_pk.avatar %}
-              <center><img src="{{ user.avatar.url }}" alt="" style="width:150px;height:150px;" class="img-circle"></center>
+            {% if member_id.avatar %}
+              <center><img src="{{ member_id.avatar.url }}" alt="" style="width:150px;height:150px;" class="img-circle"></center>
             {% endif %}
             
-            <h3><strong>{{ user.username }}</strong></h3>
-            <h5>{{ user.self_description }}</h5>
+            <h3><strong>{{ member_id.username }}</strong></h3>
+            <h5>{{ member_id.self_description }}</h5>
 <!--           </div> -->
         </div>
       </div>
