@@ -70,6 +70,7 @@ def signup(request):
                 return HttpResponse ("Unavailable token!")
             else: 
                 form.save()
+                Token.objects.filter(tokenCode=tokenCode,email=memberEmail).delete()
                 return redirect(login_view)
     else:
         form = SignupForm()
@@ -396,7 +397,7 @@ def invite(request):
     if request.method == 'GET':
         email = request.GET.get('invite_email')
         if email:
-            tokenCode = generate_token(email)
+            tokenCode = Token.generate_token(email)
             Token.objects.create(email = email, tokenCode = tokenCode).save()
             email_body = 'Your invitation token is ' + str(tokenCode)
             sentEmail = EmailMessage ('Invitation from imageX', email_body, to=[email])
@@ -512,3 +513,12 @@ def download_images(request,img_pk):
             response['Content-Disposition'] = 'attachment; filename=%s.jpg' % filename
             return response
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def othersaccount(request,member_pk):
+    member_id_found = Member.find_member(member_pk)
+    result_images = Image.retrieve_image_member(member_id_found)
+    context={
+        'result_images': result_images,'member_id':member_id_found
+    }     
+    return render(request, 'othersaccount.html', context)
+
