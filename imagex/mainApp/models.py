@@ -123,10 +123,11 @@ class Token(models.Model):
 
 	#Checks if the token and the potential member's email are matched
 	def check_token(token,email):
-		tokens = Token.objects.filter(tokenCode=token,email=email)            
-		token_available = False
+		tokens = Token.objects.filter(tokenCode=token,email=email)          
 		if tokens:
-			token_availabe = True
+			token_available = True
+		else:
+			token_available = False
 		return token_available
 
 	#Generates 6-digit token for invitation
