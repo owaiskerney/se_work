@@ -69,8 +69,6 @@ def signup(request):
         if form.is_valid():
             #check whether email has been used by existing member
             memberEmail = form.cleaned_data.get('email')
-            print("hahahahahhahahahhahtesttest!!!!!!!!!!!!!!!!")
-            print(memberEmail)
             all_emails= Member.objects.all()
             for ema in all_emails:
                 print (ema.email)
@@ -394,7 +392,7 @@ def edit_profile(request):
             for ema in all_email:
                 if request.user.email == ema.email:
                     if(request.user != ema):
-                        return render(request,'edit_profile.html',{'feedback':json.dumps("This email has been used by someone else!")})
+                        return render(request,'myaccount.html',{'feedback':json.dumps("This email has been used by someone else!")})
                 
             form.save()
             return redirect(myaccount)
