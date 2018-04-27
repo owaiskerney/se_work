@@ -68,17 +68,21 @@ def signup(request):
         memberEmail = '#'
         if form.is_valid():
             #check whether email has been used by existing member
+            memberEmail = form.cleaned_data.get('email')
+            print("hahahahahhahahahhahtesttest!!!!!!!!!!!!!!!!")
+            print(memberEmail)
             all_emails= Member.objects.all()
             for ema in all_emails:
+                print (ema.email)
                 if (ema.email== memberEmail):
-                    return render(request,'signup.html', {'form':form, 'feedback':json.dumps("Invalid email or token!")})
+                    return render(request,'signup.html', {'form':form, 'feedback':json.dumps("This email has already been used!")})
 
-            memberEmail = form.cleaned_data.get('email')
+            
             #check whether token is valid
             token_available=Token.check_token(tokenCode,memberEmail)
 
             if token_available == False:            
-                return render(request,'signup.html', {'form':form, 'feedback':json.dumps("Invalid email or token!")})
+                return render(request,'signup.html', {'form':form, 'feedback':json.dumps("Invalid token!")})
             else: 
                 form.save()
                 Token.objects.filter(tokenCode=tokenCode,email=memberEmail).delete()
@@ -87,6 +91,7 @@ def signup(request):
         form = SignupForm()
 
     return render(request, 'signup.html', {'form': form})
+
 
 #logout view
 @login_required
@@ -365,7 +370,6 @@ def invite(request):
         #check whehter email is valid 
         if email:
             tokenCode = Token.generate_token(email)
-            Token.objects.create(email = email, tokenCode = tokenCode).save()
             email_body = 'Hi! You have been invited to join imageX as a member! To register, go to our website and use the token ' + str(tokenCode)
             sentEmail = EmailMessage ('Invitation from imageX', email_body, to=[email])
             sentEmail.send()
